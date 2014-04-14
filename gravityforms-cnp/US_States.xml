@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<States>
+      <State Name="Alabama" Abbrev="AL" visible="true">
+      </State>
+      <State Name="Alaska" Abbrev="AK" visible="true">
+      </State>
+      <State Name="Arizona" Abbrev="AR" visible="true">
+      </State>
+      <State Name="Armed Forces - Africa" Abbrev="AE" visible="true">
+      </State>
+      <State Name="Armed Forces - Americas" Abbrev="AA" visible="true">
+      </State>
+      <State Name="Armed Forces - Canada" Abbrev="AE" visible="true">
+      </State>
+      <State Name="Armed Forces - Europe" Abbrev="AE" visible="true">
+      </State>
+      <State Name="Armed Forces- Middle East" Abbrev="AE" visible="true">
+      </State>
+      <State Name="Armed Forces- Pacific" Abbrev="AP" visible="true">
+      </State>
+      <State Name="California" Abbrev="CA" visible="true">
+      </State>
+      <State Name="Colorado" Abbrev="CO" visible="true">
+      </State>
+      <State Name="Connecticut" Abbrev="CT" visible="true">
+      </State>
+      <State Name="Delaware" Abbrev="DE" visible="true">
+      </State>
+      <State Name="District Of Columbia" Abbrev="DC" visible="true">
+      </State>
+      <State Name="Federated States of Micronesia" Abbrev="FM" visible="true">
+      </State>
+      <State Name="Florida" Abbrev="FL" visible="true">
+      </State>
+      <State Name="Georgia" Abbrev="GA" visible="true">
+      </State>
+      <State Name="Guam" Abbrev="GU" visible="true">
+      </State>
+      <State Name="Hawaii" Abbrev="HI" visible="true">
+      </State>
+      <State Name="Idaho" Abbrev="ID" visible="true">
+      </State>
+      <State Name="Illinois" Abbrev="IL" visible="true">
+      </State>
+      <State Name="Indiana" Abbrev="IN" visible="true">
+      </State>
+      <State Name="Iowa" Abbrev="IA" visible="true">
+      </State>
+      <State Name="Kansas" Abbrev="KS" visible="true">
+      </State>
+      <State Name="Kentucky" Abbrev="KY" visible="true">
+      </State>
+      <State Name="Louisiana" Abbrev="LA" visible="true">
+      </State>
+      <State Name="Maine" Abbrev="ME" visible="true">
+      </State>
+      <State Name="Maryland" Abbrev="MD" visible="true">
+      </State>
+      <State Name="Massachusetts" Abbrev="MA" visible="true">
+      </State>
+      <State Name="Michigan" Abbrev="MI" visible="true">
+      </State>
+      <State Name="Minnesota" Abbrev="MN" visible="true">
+      </State>
+      <State Name="Mississippi" Abbrev="MS" visible="true">
+      </State>
+      <State Name="Missouri" Abbrev="MO" visible="true">
+      </State>
+      <State Name="Montana" Abbrev="MT" visible="true">
+      </State>
+      <State Name="Neraska" Abbrev="NE" visible="true">
+      </State>
+      <State Name="Nevada" Abbrev="NV" visible="true">
+      </State>
+      <State Name="New Hampshire" Abbrev="NH" visible="true">
+      </State>
+      <State Name="New Jersey" Abbrev="MJ" visible="true">
+      </State>
+      <State Name="New Mexico" Abbrev="MN" visible="true">
+      </State>
+      <State Name="New York" Abbrev="NY" visible="true">
+      </State>
+      <State Name="North Carolina" Abbrev="NC" visible="true">
+      </State>
+      <State Name="North Dakota" Abbrev="ND" visible="true">
+      </State>
+      <State Name="Northern Mariana Islands" Abbrev="MP" visible="true">
+      </State>
+      <State Name="Ohio" Abbrev="OH" visible="true">
+      </State>
+      <State Name="Oklahoma" Abbrev="OK" visible="true">
+      </State>
+      <State Name="Oregon" Abbrev="OR" visible="true">
+      </State>
+      <State Name="Palau" Abbrev="PW" visible="true">
+      </State>
+      <State Name="Pennsylavania" Abbrev="PA" visible="true">
+      </State>
+      <State Name="Puerto Rico" Abbrev="PR" visible="true">
+      </State>
+      <State Name="Rhode Island" Abbrev="RI" visible="true">
+      </State>
+      <State Name="South Carolina" Abbrev="SC" visible="true">
+      </State>
+      <State Name="South Dakota" Abbrev="SD" visible="true">
+      </State>
+      <State Name="Tennessee" Abbrev="TN" visible="true">
+      </State>
+      <State Name="Texas" Abbrev="TX" visible="true">
+      </State>
+      <State Name="Utah" Abbrev="UT" visible="true">
+      </State>
+      <State Name="Vermont" Abbrev="VT" visible="true">
+      </State>
+      <State Name="Virgin Islands - US" Abbrev="VI" visible="true">
+      </State>
+      <State Name="Virginia" Abbrev="VA" visible="true">
+      </State>
+      <State Name="Washington" Abbrev="WA" visible="true">
+      </State>
+      <State Name="West Virginia" Abbrev="WV" visible="true">
+      </State>
+      <State Name="Wisconsin" Abbrev="WI" visible="true">
+      </State>
+      <State Name="Wyoming" Abbrev="WY" visible="true">
+      </State>
+</States>

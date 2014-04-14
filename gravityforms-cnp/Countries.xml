@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Countries>
+    <Country Name="Afghanistan" Abbrev="AF" Code="004" visible="true">
+    </Country>
+    <Country Name="Albania" Abbrev="AL" Code="008" visible="true">
+    </Country>
+    <Country Name="Antarctica" Abbrev="AQ" Code="010" visible="true">
+    </Country>
+    <Country Name="Algeria" Abbrev="DZ" Code="012" visible="true">
+    </Country>
+    <Country Name="American Samoa" Abbrev="AS" Code="016" visible="true">
+    </Country>
+    <Country Name="Andorra" Abbrev="AD" Code="020" visible="true">
+    </Country>
+    <Country Name="Angola" Abbrev="AO" Code="024" visible="true">
+    </Country>
+    <Country Name="Antigua and Barbuda" Abbrev="AG" Code="028" visible="true">
+    </Country>
+    <Country Name="Azerbaijan" Abbrev="AZ" Code="031" visible="true">
+    </Country>
+    <Country Name="Argentina" Abbrev="AR" Code="032" visible="true">
+    </Country>
+    <Country Name="Australia" Abbrev="AU" Code="036" visible="true">
+    </Country>
+    <Country Name="Austria" Abbrev="AT" Code="040" visible="true">
+    </Country>
+    <Country Name="Bahamas" Abbrev="BS" Code="044" visible="true">
+    </Country>
+    <Country Name="Bahrain" Abbrev="BH" Code="048" visible="true">
+    </Country>
+    <Country Name="Bangladesh" Abbrev="BD" Code="050" visible="true">
+    </Country>
+    <Country Name="Armenia" Abbrev="AM" Code="051" visible="true">
+    </Country>
+    <Country Name="Barbados" Abbrev="BB" Code="052" visible="true">
+    </Country>
+    <Country Name="Belgium" Abbrev="BE" Code="056" visible="true">
+    </Country>
+    <Country Name="Bermuda" Abbrev="BM" Code="060" visible="true">
+    </Country>
+    <Country Name="Bhutan" Abbrev="BT" Code="064" visible="true">
+    </Country>
+    <Country Name="Bolivia" Abbrev="BO" Code="068" visible="true">
+    </Country>
+    <Country Name="Bosnia and Herzegovina" Abbrev="BA" Code="070" visible="true">
+    </Country>
+    <Country Name="Botswana" Abbrev="BW" Code="072" visible="true">
+    </Country>
+    <Country Name="Bouvet Island" Abbrev="BV" Code="074" visible="true">
+    </Country>
+    <Country Name="Brazil" Abbrev="BR" Code="076" visible="true">
+    </Country>
+    <Country Name="Belize" Abbrev="BZ" Code="084" visible="true">
+    </Country>
+    <Country Name="British Indian Ocean Territory" Abbrev="IO" Code="086" visible="true">
+    </Country>
+    <Country Name="Solomon Islands" Abbrev="SB" Code="090" visible="true">
+    </Country>
+    <Country Name="Virgin Islands, British" Abbrev="VG" Code="092" visible="true">
+    </Country>
+    <Country Name="Brunei Darussalam" Abbrev="BN" Code="096" visible="true">
+    </Country>
+    <Country Name="Bulgaria" Abbrev="BG" Code="100" visible="true">
+    </Country>
+    <Country Name="Myanmar" Abbrev="MM" Code="104" visible="true">
+    </Country>
+    <Country Name="Burundi" Abbrev="BI" Code="108" visible="true">
+    </Country>
+    <Country Name="Belarus" Abbrev="BY" Code="112" visible="true">
+    </Country>
+    <Country Name="Cambodia" Abbrev="KH" Code="116" visible="true">
+    </Country>
+    <Country Name="Cameroon" Abbrev="CM" Code="120" visible="true">
+    </Country>
+    <Country Name="Canada" Abbrev="CA" Code="124" visible="true">
+    </Country>
+    <Country Name="Cape Verde" Abbrev="CV" Code="132" visible="true">
+    </Country>
+    <Country Name="Cayman Islands" Abbrev="KY" Code="136" visible="true">
+    </Country>
+    <Country Name="Central African Republic" Abbrev="CF" Code="140" visible="true">
+    </Country>
+    <Country Name="Sri Lanka" Abbrev="LK" Code="144" visible="true">
+    </Country>
+    <Country Name="Chad" Abbrev="TD" Code="148" visible="true">
+    </Country>
+    <Country Name="Chile" Abbrev="CL" Code="152" visible="true">
+    </Country>
+    <Country Name="China" Abbrev="CN" Code="156" visible="true">
+    </Country>
+    <Country Name="Taiwan, Province of China" Abbrev="TW" Code="158" visible="true">
+    </Country>
+    <Country Name="Christmas Island" Abbrev="CX" Code="162" visible="true">
+    </Country>
+    <Country Name="Cocos (Keeling) Islands" Abbrev="CC" Code="166" visible="true">
+    </Country>
+    <Country Name="Colombia" Abbrev="CO" Code="170" visible="true">
+    </Country>
+    <Country Name="Comoros" Abbrev="KM" Code="174" visible="true">
+    </Country>
+    <Country Name="Mayotte" Abbrev="YT" Code="175" visible="true">
+    </Country>
+    <Country Name="Congo" Abbrev="CG" Code="178" visible="true">
+    </Country>
+    <Country Name="Congo, the Democratic Republic of the" Abbrev="CD" Code="180" visible="true">
+    </Country>
+    <Country Name="Cook Islands" Abbrev="CK" Code="184" visible="true">
+    </Country>
+    <Country Name="Costa Rica" Abbrev="CR" Code="188" visible="true">
+    </Country>
+    <Country Name="Croatia" Abbrev="HR" Code="191" visible="true">
+    </Country>
+    <Country Name="Cuba" Abbrev="CU" Code="192" visible="true">
+    </Country>
+    <Country Name="Cyprus" Abbrev="CY" Code="196" visible="true">
+    </Country>
+    <Country Name="Czech Republic" Abbrev="CZ" Code="203" visible="true">
+    </Country>
+    <Country Name="Benin" Abbrev="BJ" Code="204" visible="true">
+    </Country>
+    <Country Name="Denmark" Abbrev="DK" Code="208" visible="true">
+    </Country>
+    <Country Name="Dominica" Abbrev="DM" Code="212" visible="true">
+    </Country>
+    <Country Name="Dominican Republic" Abbrev="DO" Code="214" visible="true">
+    </Country>
+    <Country Name="Ecuador" Abbrev="EC" Code="218" visible="true">
+    </Country>
+    <Country Name="El Salvador" Abbrev="SV" Code="222" visible="true">
+    </Country>
+    <Country Name="Equatorial Guinea" Abbrev="GQ" Code="226" visible="true">
+    </Country>
+    <Country Name="Ethiopia" Abbrev="ET" Code="231" visible="true">
+    </Country>
+    <Country Name="Eritrea" Abbrev="ER" Code="232" visible="true">
+    </Country>
+    <Country Name="Estonia" Abbrev="EE" Code="233" visible="true">
+    </Country>
+    <Country Name="Faroe Islands" Abbrev="FO" Code="234" visible="true">
+    </Country>
+    <Country Name="Falkland Islands (Malvinas)" Abbrev="FK" Code="238" visible="true">
+    </Country>
+    <Country Name="South Georgia and the South Sandwich Islands" Abbrev="GS" Code="239" visible="true">
+    </Country>
+    <Country Name="Fiji" Abbrev="FJ" Code="242" visible="true">
+    </Country>
+    <Country Name="Finland" Abbrev="FI" Code="246" visible="true">
+    </Country>
+    <Country Name="Aland Islands" Abbrev="AX" Code="248" visible="true">
+    </Country>
+    <Country Name="France" Abbrev="FR" Code="250" visible="true">
+    </Country>
+    <Country Name="French Guiana" Abbrev="GF" Code="254" visible="true">
+    </Country>
+    <Country Name="French Polynesia" Abbrev="PF" Code="258" visible="true">
+    </Country>
+    <Country Name="French Southern Territories" Abbrev="TF" Code="260" visible="true">
+    </Country>
+    <Country Name="Djibouti" Abbrev="DJ" Code="262" visible="true">
+    </Country>
+    <Country Name="Gabon" Abbrev="GA" Code="266" visible="true">
+    </Country>
+    <Country Name="Georgia" Abbrev="GE" Code="268" visible="true">
+    </Country>
+    <Country Name="Gambia" Abbrev="GM" Code="270" visible="true">
+    </Country>
+    <Country Name="Palestinian Territory, Occupied" Abbrev="PS" Code="275" visible="true">
+    </Country>
+    <Country Name="Germany" Abbrev="DE" Code="276" visible="true">
+    </Country>
+    <Country Name="Ghana" Abbrev="GH" Code="288" visible="true">
+    </Country>
+    <Country Name="Gibraltar" Abbrev="GI" Code="292" visible="true">
+    </Country>
+    <Country Name="Kiribati" Abbrev="KI" Code="296" visible="true">
+    </Country>
+    <Country Name="Greece" Abbrev="GR" Code="300" visible="true">
+    </Country>
+    <Country Name="Greenland" Abbrev="GL" Code="304" visible="true">
+    </Country>
+    <Country Name="Grenada" Abbrev="GD" Code="308" visible="true">
+    </Country>
+    <Country Name="Guadeloupe" Abbrev="GP" Code="312" visible="true">
+    </Country>
+    <Country Name="Guam" Abbrev="GU" Code="316" visible="true">
+    </Country>
+    <Country Name="Guatemala" Abbrev="GT" Code="320" visible="true">
+    </Country>
+    <Country Name="Guinea" Abbrev="GN" Code="324" visible="true">
+    </Country>
+    <Country Name="Guyana" Abbrev="GY" Code="328" visible="true">
+    </Country>
+    <Country Name="Haiti" Abbrev="HT" Code="332" visible="true">
+    </Country>
+    <Country Name="Heard Island and McDonald Islands" Abbrev="HM" Code="334" visible="true">
+    </Country>
+    <Country Name="Holy See (Vatican City State)" Abbrev="VA" Code="336" visible="true">
+    </Country>
+    <Country Name="Honduras" Abbrev="HN" Code="340" visible="true">
+    </Country>
+    <Country Name="Hong Kong" Abbrev="HK" Code="344" visible="true">
+    </Country>
+    <Country Name="Hungary" Abbrev="HU" Code="348" visible="true">
+    </Country>
+    <Country Name="Iceland" Abbrev="IS" Code="352" visible="true">
+    </Country>
+    <Country Name="India" Abbrev="IN" Code="356" visible="true">
+    </Country>
+    <Country Name="Indonesia" Abbrev="ID" Code="360" visible="true">
+    </Country>
+    <Country Name="Iran" Abbrev="IR" Code="364" visible="true">
+    </Country>
+    <Country Name="Iraq" Abbrev="IQ" Code="368" visible="true">
+    </Country>
+    <Country Name="Ireland" Abbrev="IE" Code="372" visible="true">
+    </Country>
+    <Country Name="Israel" Abbrev="IL" Code="376" visible="true">
+    </Country>
+    <Country Name="Italy" Abbrev="IT" Code="380" visible="true">
+    </Country>
+    <Country Name="Cote D'ivoire" Abbrev="CI" Code="384" visible="true">
+    </Country>
+    <Country Name="Jamaica" Abbrev="JM" Code="388" visible="true">
+    </Country>
+    <Country Name="Japan" Abbrev="JP" Code="392" visible="true">
+    </Country>
+    <Country Name="Kazakhstan" Abbrev="KZ" Code="398" visible="true">
+    </Country>
+    <Country Name="Jordan" Abbrev="JO" Code="400" visible="true">
+    </Country>
+    <Country Name="Kenya" Abbrev="KE" Code="404" visible="true">
+		</Country>
+    <Country Name="Korea, Democratic People's Republic of" Abbrev="KP" Code="408" visible="true">
+    </Country>
+    <Country Name="Korea, Republic of" Abbrev="KR" Code="410" visible="true">
+    </Country>
+    <Country Name="Kuwait" Abbrev="KW" Code="414" visible="true">
+    </Country>
+    <Country Name="Kyrgyzstan" Abbrev="KG" Code="417" visible="true">
+    </Country>
+    <Country Name="Lao People's Democratic Republic" Abbrev="LA" Code="418" visible="true">
+    </Country>
+    <Country Name="Lebanon" Abbrev="LB" Code="422" visible="true">
+    </Country>
+    <Country Name="Lesotho" Abbrev="LS" Code="426" visible="true">
+    </Country>
+    <Country Name="Latvia" Abbrev="LV" Code="428" visible="true">
+    </Country>
+    <Country Name="Liberia" Abbrev="LR" Code="430" visible="true">
+    </Country>
+    <Country Name="Libyan Arab Jamahiriya" Abbrev="LY" Code="434" visible="true">
+    </Country>
+    <Country Name="Liechtenstein" Abbrev="LI" Code="438" visible="true">
+    </Country>
+    <Country Name="Lithuania" Abbrev="LT" Code="440" visible="true">
+    </Country>
+    <Country Name="Luxembourg" Abbrev="LU" Code="442" visible="true">
+    </Country>
+    <Country Name="Macao" Abbrev="MO" Code="446" visible="true">
+    </Country>
+    <Country Name="Madagascar" Abbrev="MG" Code="450" visible="true">
+    </Country>
+    <Country Name="Malawi" Abbrev="MW" Code="454" visible="true">
+    </Country>
+    <Country Name="Malaysia" Abbrev="MY" Code="458" visible="true">
+    </Country>
+    <Country Name="Maldives" Abbrev="MV" Code="462" visible="true">
+    </Country>
+    <Country Name="Mali" Abbrev="ML" Code="466" visible="true">
+    </Country>
+    <Country Name="Malta" Abbrev="MT" Code="470" visible="true">
+    </Country>
+    <Country Name="Martinique" Abbrev="MQ" Code="474" visible="true">
+    </Country>
+    <Country Name="Mauritania" Abbrev="MR" Code="478" visible="true">
+    </Country>
+    <Country Name="Mauritius" Abbrev="MU" Code="480" visible="true">
+    </Country>
+    <Country Name="Mexico" Abbrev="MX" Code="484" visible="true">
+    </Country>
+    <Country Name="Monaco" Abbrev="MC" Code="492" visible="true">
+    </Country>
+    <Country Name="Mongolia" Abbrev="MN" Code="496" visible="true">
+    </Country>
+    <Country Name="Moldova, Republic of" Abbrev="MD" Code="498" visible="true">
+    </Country>
+    <Country Name="Montenegro" Abbrev="ME" Code="499" visible="true">
+    </Country>
+    <Country Name="Montserrat" Abbrev="MS" Code="500" visible="true">
+    </Country>
+    <Country Name="Morocco" Abbrev="MA" Code="504" visible="true">
+    </Country>
+    <Country Name="Mozambique" Abbrev="MZ" Code="508" visible="true">
+    </Country>
+    <Country Name="Oman" Abbrev="OM" Code="512" visible="true">
+    </Country>
+    <Country Name="Namibia" Abbrev="NA" Code="516" visible="true">
+    </Country>
+    <Country Name="Nauru" Abbrev="NR" Code="520" visible="true">
+    </Country>
+    <Country Name="Nepal" Abbrev="NP" Code="524" visible="true">
+    </Country>
+    <Country Name="Netherlands" Abbrev="NL" Code="528" visible="true">
+    </Country>
+    <Country Name="Netherlands Antilles" Abbrev="AN" Code="530" visible="true">
+    </Country>
+    <Country Name="Aruba" Abbrev="AW" Code="533" visible="true">
+    </Country>
+    <Country Name="New Caledonia" Abbrev="NC" Code="540" visible="true">
+    </Country>
+    <Country Name="Vanuatu" Abbrev="VU" Code="548" visible="true">
+    </Country>
+    <Country Name="New Zealand" Abbrev="NZ" Code="554" visible="true">
+    </Country>
+    <Country Name="Nicaragua" Abbrev="NI" Code="558" visible="true">
+    </Country>
+    <Country Name="Niger" Abbrev="NE" Code="562" visible="true">
+    </Country>
+    <Country Name="Nigeria" Abbrev="NG" Code="566" visible="true">
+    </Country>
+    <Country Name="Niue" Abbrev="NU" Code="570" visible="true">
+    </Country>
+    <Country Name="Norfolk Island" Abbrev="NF" Code="574" visible="true">
+    </Country>
+    <Country Name="Norway" Abbrev="NO" Code="578" visible="true">
+    </Country>
+    <Country Name="Northern Mariana Islands" Abbrev="MP" Code="580" visible="true">
+    </Country>
+    <Country Name="United States Minor Outlying Islands" Abbrev="UM" Code="581" visible="true">
+    </Country>
+    <Country Name="Micronesia, Federated States of" Abbrev="FM" Code="583" visible="true">
+    </Country>
+    <Country Name="Marshall Islands" Abbrev="MH" Code="584" visible="true">
+    </Country>
+    <Country Name="Palau" Abbrev="PW" Code="585" visible="true">
+    </Country>
+    <Country Name="Pakistan" Abbrev="PK" Code="586" visible="true">
+    </Country>
+    <Country Name="Panama" Abbrev="PA" Code="591" visible="true">
+    </Country>
+    <Country Name="Papua New Guinea" Abbrev="PG" Code="598" visible="true">
+    </Country>
+    <Country Name="Paraguay" Abbrev="PY" Code="600" visible="true">
+    </Country>
+    <Country Name="Peru" Abbrev="PE" Code="604" visible="true">
+    </Country>
+    <Country Name="Philippines" Abbrev="PH" Code="608" visible="true">
+    </Country>
+    <Country Name="Pitcairn" Abbrev="PN" Code="612" visible="true">
+    </Country>
+    <Country Name="Poland" Abbrev="PL" Code="616" visible="true">
+    </Country>
+    <Country Name="Portugal" Abbrev="PT" Code="620" visible="true">
+    </Country>
+    <Country Name="Guinea-Bissau" Abbrev="GW" Code="624" visible="true">
+    </Country>
+    <Country Name="Timor-Leste" Abbrev="TL" Code="626" visible="true">
+    </Country>
+    <Country Name="Puerto Rico" Abbrev="PR" Code="630" visible="true">
+    </Country>
+    <Country Name="Qatar" Abbrev="QA" Code="634" visible="true">
+    </Country>
+    <Country Name="Reunion" Abbrev="RE" Code="638" visible="true">
+    </Country>
+    <Country Name="Romania" Abbrev="RO" Code="642" visible="true">
+    </Country>
+    <Country Name="Russian Federation" Abbrev="RU" Code="643" visible="true">
+    </Country>
+    <Country Name="Rwanda" Abbrev="RW" Code="646" visible="true">
+    </Country>    
+    <Country Name="Saint Helena" Abbrev="SH" Code="654" visible="true">
+    </Country>
+    <Country Name="Saint Kitts and Nevis" Abbrev="KN" Code="659" visible="true">
+    </Country>
+    <Country Name="Anguilla" Abbrev="AI" Code="660" visible="true">
+    </Country>
+    <Country Name="Saint Lucia" Abbrev="LC" Code="662" visible="true">
+    </Country>
+    <Country Name="Saint Martin" Abbrev="MF" Code="663" visible="true">
+    </Country>
+    <Country Name="Saint Pierre and Miquelon" Abbrev="PM" Code="666" visible="true">
+    </Country>
+    <Country Name="Saint Vincent and the Grenadines" Abbrev="VC" Code="670" visible="true">
+    </Country>
+    <Country Name="San Marino" Abbrev="SM" Code="674" visible="true">
+    </Country>
+    <Country Name="Sao Tome and Principe" Abbrev="ST" Code="678" visible="true">
+    </Country>
+    <Country Name="Saudi Arabia" Abbrev="SA" Code="682" visible="true">
+    </Country>
+    <Country Name="Senegal" Abbrev="SN" Code="686" visible="true">
+    </Country>
+    <Country Name="Serbia" Abbrev="RS" Code="688" visible="true">
+    </Country>
+    <Country Name="Seychelles" Abbrev="SC" Code="690" visible="true">
+    </Country>
+    <Country Name="Sierra Leone" Abbrev="SL" Code="694" visible="true">
+    </Country>
+    <Country Name="Singapore" Abbrev="SG" Code="702" visible="true">
+    </Country>
+    <Country Name="Slovakia" Abbrev="SK" Code="703" visible="true">
+    </Country>
+    <Country Name="Viet Nam" Abbrev="VN" Code="704" visible="true">
+    </Country>
+    <Country Name="Slovenia" Abbrev="SI" Code="705" visible="true">
+    </Country>
+    <Country Name="Somalia" Abbrev="SO" Code="706" visible="true">
+    </Country>
+    <Country Name="South Africa" Abbrev="ZA" Code="710" visible="true">
+    </Country>
+    <Country Name="Zimbabwe" Abbrev="ZW" Code="716" visible="true">
+    </Country>
+    <Country Name="Spain" Abbrev="ES" Code="724" visible="true">
+    </Country>
+    <Country Name="Western Sahara" Abbrev="EH" Code="732" visible="true">
+    </Country>
+    <Country Name="Sudan" Abbrev="SD" Code="736" visible="true">
+    </Country>
+    <Country Name="Suriname" Abbrev="SR" Code="740" visible="true">
+    </Country>
+    <Country Name="Svalbard and Jan Mayen" Abbrev="SJ" Code="744" visible="true">
+    </Country>
+    <Country Name="Swaziland" Abbrev="SZ" Code="748" visible="true">
+    </Country>
+    <Country Name="Sweden" Abbrev="SE" Code="752" visible="true">
+    </Country>
+    <Country Name="Switzerland" Abbrev="CH" Code="756" visible="true">
+    </Country>
+    <Country Name="Syrian Arab Republic" Abbrev="SY" Code="760" visible="true">
+    </Country>
+    <Country Name="Tajikistan" Abbrev="TJ" Code="762" visible="true">
+    </Country>
+    <Country Name="Thailand" Abbrev="TH" Code="840" visible="764">
+    </Country>
+    <Country Name="Togo" Abbrev="TG" Code="768" visible="true">
+    </Country>
+    <Country Name="Tokelau" Abbrev="TK" Code="772" visible="true">
+    </Country>
+    <Country Name="Tonga" Abbrev="TO" Code="776" visible="true">
+    </Country>
+    <Country Name="Trinidad and Tobago" Abbrev="TT" Code="780" visible="true">
+    </Country>
+    <Country Name="United Arab Emirates" Abbrev="AE" Code="784" visible="true">
+    </Country>
+    <Country Name="Tunisia" Abbrev="TN" Code="788" visible="true">
+    </Country>
+    <Country Name="Turkey" Abbrev="TR" Code="792" visible="true">
+    </Country>
+    <Country Name="Turkmenistan" Abbrev="TM" Code="795" visible="true">
+    </Country>
+    <Country Name="Turks and Caicos Islands" Abbrev="TC" Code="796" visible="true">
+    </Country>
+    <Country Name="Tuvalu" Abbrev="TV" Code="798" visible="true">
+    </Country>
+    <Country Name="Uganda" Abbrev="UG" Code="800" visible="true">
+    </Country>
+    <Country Name="Ukraine" Abbrev="UA" Code="804" visible="true">
+    </Country>
+    <Country Name="Macedonia" Abbrev="MK" Code="807" visible="true">
+    </Country>
+    <Country Name="Egypt" Abbrev="EG" Code="818" visible="true">
+    </Country>
+    <Country Name="United Kingdom" Abbrev="GB" Code="826" visible="true">
+    </Country>
+    <Country Name="Guernsey" Abbrev="GG" Code="831" visible="true">
+    </Country>
+    <Country Name="Jersey" Abbrev="JE" Code="832" visible="true">
+    </Country>
+    <Country Name="Isle of Man" Abbrev="IM" Code="833" visible="true">
+    </Country>
+    <Country Name="Tanzania" Abbrev="TZ" Code="834" visible="true">
+    </Country>
+	  <Country Name="United States" Abbrev="US" Code="840" visible="true">
+	  	<StatesFileName>"US_States.xml"</StatesFileName>
+	    <Order>100</Order>
+	  </Country>
+    <Country Name="Virgin Islands, U.S." Abbrev="VI" Code="850" visible="true">
+    </Country>
+    <Country Name="Burkina Faso" Abbrev="BF" Code="854" visible="true">
+    </Country>
+    <Country Name="Uruguay" Abbrev="UY" Code="858" visible="true">
+    </Country>
+    <Country Name="Uzbekistan" Abbrev="UZ" Code="860" visible="true">
+    </Country>
+    <Country Name="Venezuela" Abbrev="VE" Code="862" visible="true">
+    </Country>
+    <Country Name="Wallis and Futuna" Abbrev="WF" Code="876" visible="true">
+    </Country>
+    <Country Name="Samoa" Abbrev="WS" Code="882" visible="true">
+    </Country>
+    <Country Name="Yemen" Abbrev="YE" Code="887" visible="true">
+    </Country>
+    <Country Name="Zambia" Abbrev="ZM" Code="894" visible="true">
+    </Country>  
+</Countries>
