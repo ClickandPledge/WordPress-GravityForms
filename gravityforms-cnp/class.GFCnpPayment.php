@@ -310,7 +310,7 @@ class GFCnpPayment {
 		$applicationname=$dom->createElement('Name','CnP_PaaS_FM_GravityForm'); 
 		$applicationid=$application->appendChild($applicationname);
 
-		$applicationversion=$dom->createElement('Version','1.000.000.000.20140306');  //2.000.000.000.20130103 Version-Minor change-Bug Fix-Internal Release Number -Release Date
+		$applicationversion=$dom->createElement('Version','1.001.000.000.20140417');  //2.000.000.000.20130103 Version-Minor change-Bug Fix-Internal Release Number -Release Date
 		$applicationversion=$application->appendChild($applicationversion);
 
 		$request = $dom->createElement('Request', '');
@@ -593,7 +593,7 @@ class GFCnpPayment {
 							$OptionValue = $sub['OptionValue'];
 							}
 							$cost += $sub['UnitPrice'];
-						} elseif($sub['OptionValue'] != '') {
+						} elseif($sub['OptionValue'] != '' && $pr['ItemID'] == $sub['ItemID']) {
 							$OptionValue = $sub['OptionValue'];
 							$tempName2 .= $sub['OptionValue'];
 						}
@@ -635,8 +635,8 @@ class GFCnpPayment {
 					foreach($orderplaced->customfields as $sub)
 					{
 						if((substr($sub['FieldName'], 0, 5) == '{SKU}') && $sub['FieldValue'] != '') {
-							$parts = explode('}{Option=', $sub['FieldName']);
-							//$parts = explode('}{Option=', '{SKU}{FIELDID=8}');
+							$parts = explode('}{OPTION=', $sub['FieldName']);
+							//Format:{SKU}{FIELDID=11}{OPTION=N}
 							//print_r($parts);
 							if(count($parts) > 1) //TO handle if product has options
 							{
@@ -653,14 +653,15 @@ class GFCnpPayment {
 							//echo $id;
 							//echo $id.'#'.$pr['ItemID'].'<br>';
 							//$id = substr($sub['FieldName'], 14);
-							//print_r($sub);
-							//echo $OptionValue.'#'.$val;
-							if($id == $pr['ItemID']) 
+							//print_r($parts);
+							//echo $OptionValue.'#'.substr($parts[1],0,-1);
+							//echo '<br>';
+							if($id == $pr['ItemID'] && $OptionValue == substr($parts[1],0,-1)) 
 							{
 								
 								if(count($parts) > 1) //TO handle if product has options
 								{
-									if($OptionValue != '' && $val != '' && $OptionValue == $val)
+									if($OptionValue != '' && $val != '' && $OptionValue == substr($parts[1],0,-1))
 									{
 										$sku_code=$dom->createElement('SKU',$this->safeString($sub['FieldValue'], 100));
 										$sku_code=$orderitem->appendChild($sku_code);

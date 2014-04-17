@@ -42,7 +42,7 @@ class GFCnpOptionsForm {
 			if(isset($_POST['JCB']))
 			$available_cards['JCB'] = 'JCB';
 			$this->available_cards = $available_cards;
-			
+			//print_r($this->available_cards);
 			$this->email_customer = self::getPostValue('email_customer');			
 			$this->OrganizationInformation = self::getPostValue('OrganizationInformation');
 			$this->ThankYouMessage = self::getPostValue('ThankYouMessage');
@@ -209,6 +209,7 @@ class GFCnpOptionsAdmin {
 				$this->plugin->options['indefinite'] = $this->frm->indefinite;
 				
 				update_option(GFCNP_PLUGIN_OPTIONS, $this->plugin->options);
+				
 				$this->saveErrorMessages();
 				$this->plugin->showMessage(__('Options saved.'));
 				//die('after message');
@@ -235,8 +236,7 @@ class GFCnpOptionsAdmin {
 				$this->frm->available_cards['American_Express']	= 'American Express';
 				$this->frm->available_cards['Discover']	= 'Discover';
 				$this->frm->available_cards['MasterCard']	= 'MasterCard';
-				$this->frm->available_cards['JCB']	= 'JCB';
-				
+				$this->frm->available_cards['JCB']	= 'JCB';				
 			}
 			$this->frm->email_customer = $this->plugin->options['email_customer'];
 			$this->frm->OrganizationInformation = $this->plugin->options['OrganizationInformation'];

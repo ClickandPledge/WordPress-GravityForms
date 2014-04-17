@@ -65,6 +65,25 @@ To be added at the bottom of the receipt. Typically the text provides proof that
 &lt;P&gt;&lt;/P&gt;&lt;BR /&gt;&lt;OL&gt;&lt;/OL&gt;&lt;LI&gt;&lt;/LI&gt;&lt;UL&gt;&lt;/UL&gt;. <br>Maximum: 1500 characters, You have <span id="TermsCondition_countdown">1500</span> characters left.				
 			</td>
 		</tr>
+		
+		<tr valign='top' id="Periodicity_tr">
+			<th>Accepted Credit Cards</th>
+			<td>
+				<?php
+				$this->frm->available_cards_all = array('Visa' => 'Visa', 'American_Express' => 'American Express', 'Discover' => 'Discover', 'MasterCard' => 'MasterCard', 'JCB' => 'JCB');
+				//print_r($this->frm->available_cards);
+				foreach($this->frm->available_cards_all as $card => $value) {
+				//echo $card.'<br>';
+					if(in_array($card, array_keys($this->frm->available_cards))) {
+					echo '<input type="checkbox" name="'.$card.'" id="'.$card.'" value="'.$value.'" checked>&nbsp;'.$value.'<br>';
+					} else {
+					echo '<input type="checkbox" name="'.$card.'" id="'.$card.'" value="'.$value.'">&nbsp;'.$value.'<br>';
+					}
+				}					
+				?>
+			</td>
+		</tr>
+		
 		<!--
 		<tr valign='top'>
 			<th>Recurring Transaction</th>
@@ -144,7 +163,7 @@ To be added at the bottom of the receipt. Typically the text provides proof that
 						return false;
 					}
 					
-					/*
+					
 					var cards = 0;
 					if(jQuery('#Visa').is(':checked'))
 					{
@@ -173,7 +192,7 @@ To be added at the bottom of the receipt. Typically the text provides proof that
 						jQuery('#Visa').focus();
 						return false;
 					}
-					*/
+					
 					/*
 					if(jQuery('#isRecurring').val() == 1)
 					{

@@ -41,9 +41,18 @@ class GFCnpPlugin {
 
 		// record plugin URL base
 		$this->urlBase = plugin_dir_url(__FILE__);
-
+		
+		//print_r(unserialize($this->options['available_cards']));
 		// filter the cards array to just Visa, MasterCard and Amex
-		$this->acceptedCards = array('amex' => 1, 'mastercard' => 1, 'visa' => 1, 'discover' => 1, 'jcb' => 1);
+
+		foreach(unserialize($this->options['available_cards']) as $card => $value) {
+		if($card == 'Visa') $this->acceptedCards['visa'] = 1;
+		if($card == 'American_Express') $this->acceptedCards['amex'] = 1;
+		if($card == 'Discover') $this->acceptedCards['discover'] = 1;
+		if($card == 'MasterCard') $this->acceptedCards['mastercard'] = 1;
+		if($card == 'JCB') $this->acceptedCards['jcb'] = 1;
+		//$this->acceptedCards = array('amex' => 1, 'mastercard' => 1, 'visa' => 1, 'discover' => 1, 'jcb' => 1);
+		}
 
 		add_action('init', array($this, 'init'));
 	}

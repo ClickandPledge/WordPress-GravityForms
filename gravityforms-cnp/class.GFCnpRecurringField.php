@@ -643,8 +643,9 @@ class GFCnpRecurringField {
 				{
 					//$Periods = unserialize($this->plugin->options['Periods']);
 					$Periods = $value;
-					//print_r($_POST);
-					if(count($Periods) > 1) 
+					//print_r($Periods);
+					//die('ffffff');
+					if(count($Periods) > 0) 
 					{
 						$selected = $_POST['gfcnp_'.$id];
 						$input  = "<div class='ginput_container'>$title<ul class='gfield_checkbox'><select name='gfcnp_{$id}[{$sid}]' class='".$field['label_class']."' id='$field_id' >";
@@ -657,6 +658,18 @@ class GFCnpRecurringField {
 						$sid++;
 						}
 						$input .= "</select></ul></div>";
+					}
+					else
+					{
+						$keys = array_values($Periods);
+						if($_POST['gfcnp_'.$id.'_Periodicity'])
+						$selected = $_POST['gfcnp_'.$id.'_Periodicity'];
+						else
+						$selected = $keys[0];
+						//print_r($Periods);
+						//print_r($keys);
+						//die('ffff');
+						echo "<input type='hidden' name='gfcnp_{$id}_Periodicity' value='".$selected."'>";
 					}
 				}
 				
@@ -816,7 +829,9 @@ class GFCnpRecurringField {
 	*/
 	public static function getPost($field_id) {
 		$recurring = rgpost('gfcnp_' . $field_id);
-		
+		//echo '<pre>';
+		//print_r($_POST);
+		//die();
 		if (is_array($recurring)) {
 			$Periodicity = explode('|', $recurring[4]);
 			if(count($Periodicity) > 1)
