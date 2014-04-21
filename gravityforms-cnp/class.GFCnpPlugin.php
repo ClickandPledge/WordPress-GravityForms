@@ -47,13 +47,13 @@ class GFCnpPlugin {
 
 		foreach(unserialize($this->options['available_cards']) as $card => $value) {
 		if($card == 'Visa') $this->acceptedCards['visa'] = 1;
-		if($card == 'American_Express') $this->acceptedCards['amex'] = 1;
-		if($card == 'Discover') $this->acceptedCards['discover'] = 1;
 		if($card == 'MasterCard') $this->acceptedCards['mastercard'] = 1;
+		if($card == 'Discover') $this->acceptedCards['discover'] = 1;
+		if($card == 'American_Express') $this->acceptedCards['amex'] = 1;		
 		if($card == 'JCB') $this->acceptedCards['jcb'] = 1;
 		//$this->acceptedCards = array('amex' => 1, 'mastercard' => 1, 'visa' => 1, 'discover' => 1, 'jcb' => 1);
 		}
-
+//print_r($this->acceptedCards);
 		add_action('init', array($this, 'init'));
 	}
 
@@ -67,7 +67,7 @@ class GFCnpPlugin {
 			'useTest' => true,
 			'sslVerifyPeer' => true,
 			
-			'available_cards' => serialize(array('Visa' => 'Visa', 'American_Express' => 'American Express', 'Discover' => 'Discover', 'MasterCard' => 'MasterCard', 'JCB' => 'JCB')),
+			'available_cards' => serialize(array('Visa' => 'Visa', 'MasterCard' => 'MasterCard', 'Discover' => 'Discover', 'American_Express' => 'American Express', 'JCB' => 'JCB')),
 			'OrganizationInformation' => '',
 			'ThankYouMessage' => '',
 			'TermsCondition' => '',
@@ -96,34 +96,23 @@ class GFCnpPlugin {
 			add_action('gform_enable_credit_card_field', '__return_true');		// just return true to enable CC fields
 			add_filter('gform_creditcard_types', array($this, 'gformCCTypes'));
 			add_filter('gform_currency', array($this, 'gformCurrency'));
-			add_filter('gform_validation', array($this, 'gformValidation'));
+			add_filter('gform_validation', array($this, 'gformValidation'), 10, 4);
 			add_action('gform_after_submission', array($this, 'gformAfterSubmission'), 10, 2);
 			add_filter('gform_custom_merge_tags', array($this, 'gformCustomMergeTags'), 10, 4);
 			add_filter('gform_replace_merge_tags', array($this, 'gformReplaceMergeTags'), 10, 7);
-			
-			//new GFCnpSKUField($this);
-			add_action('gform_field_standard_settings', array($this, 'gformAddsku'));
-            //do_action("gform_field_standard_settings", 1, $form_id);                             
-			//print_r($this->options);
-			//if($this->options['isRecurring'] == 1) 
-			{
+						
 			// hook into Gravity Forms to handle Recurring Payments custom field
 			new GFCnpRecurringField($this);
-			}
+			
 		}
 
 		if (is_admin()) {
 			// kick off the admin handling
 			new GFCnpAdmin($this);
 		}
-		
-		//SKU field test
-		//new GFCnpSKUField($this);
 	}
 
-	public function gformAddsku($form) {
-		
-	}
+	
 	
 	/**
 	* check current form for information
@@ -144,8 +133,10 @@ class GFCnpPlugin {
 	*/
 	public function gformValidation($data) {
 		
+		$meta = GFCnpData::get_feed_by_form($data['form']['id']);
+		
 	// make sure all other validations passed
-		if ($data['is_valid']) {
+		if ($data['is_valid'] && count($meta)) {
 			$formData = new GFCnpFormData($data['form']);
 			
 			// make sure form hasn't already been submitted / processed			
@@ -237,7 +228,7 @@ class GFCnpPlugin {
 						// if no errors, try to bill it
 						if ($data['is_valid']) {
 							$data = $this->processSinglePayment($data, $formData);
-							
+							//$data['is_valid'] = false;
 						}
 					}
 				}
@@ -336,8 +327,7 @@ class GFCnpPlugin {
 					'payment_amount' => $cnp->amount,
 					'transaction_type' => 1,
 					'authcode' => $VaultGUID,
-				);
-				
+				);				
 			}
 			else {
 				$data['is_valid'] = false;

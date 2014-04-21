@@ -8,7 +8,7 @@
 	<table class="form-table">
 
 		<tr>
-			<th>C&amp;P Account ID</th>
+			<th>Account ID</th>
 			<td>
 				<input type='text' class="regular-text" name='AccountID' value="<?php echo esc_attr($this->frm->AccountID); ?>" /><br>
 				Get your "Account ID" from Click & Pledge. [Portal > Account Info > API Information].
@@ -16,7 +16,7 @@
 		</tr>
 
 		<tr valign='top'>
-			<th>C&amp;P API Account GUID</th>
+			<th>API Account GUID</th>
 			<td>
 				<input type='text' class="regular-text" name='AccountGuid' value="<?php echo esc_attr($this->frm->AccountGuid); ?>" /><br>
 				Get your "API Account GUID" from Click & Pledge [Portal > Account Info > API Information].
@@ -24,7 +24,7 @@
 		</tr>
 
 		<tr valign='top'>
-			<th>API Mode</th>
+			<th>Mode</th>
 			<td>
 				<label><input type="radio" name="useTest" value="Y" <?php echo checked($this->frm->useTest, 'Y'); ?> />&nbsp;Test</label>
 				&nbsp;&nbsp;<label><input type="radio" name="useTest" value="N" <?php echo checked($this->frm->useTest, 'N'); ?> />&nbsp;Production</label><br>
@@ -70,7 +70,7 @@ To be added at the bottom of the receipt. Typically the text provides proof that
 			<th>Accepted Credit Cards</th>
 			<td>
 				<?php
-				$this->frm->available_cards_all = array('Visa' => 'Visa', 'American_Express' => 'American Express', 'Discover' => 'Discover', 'MasterCard' => 'MasterCard', 'JCB' => 'JCB');
+				$this->frm->available_cards_all = array('Visa' => 'Visa', 'MasterCard' => 'MasterCard', 'Discover' => 'Discover', 'American_Express' => 'American Express',   'JCB' => 'JCB');
 				//print_r($this->frm->available_cards);
 				foreach($this->frm->available_cards_all as $card => $value) {
 				//echo $card.'<br>';

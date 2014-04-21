@@ -227,15 +227,15 @@ class GFCnpOptionsAdmin {
 			$this->frm->available_cards = unserialize($this->plugin->options['available_cards']);
 			//print_r($this->frm->available_cards);
 			//die('ffffffffff');
-			$available_cards_all = array('Visa' => 'Visa', 'American_Express' => 'American Express', 'Discover' => 'Discover', 'MasterCard' => 'MasterCard', 'JCB' => 'JCB');
+			$available_cards_all = array('Visa' => 'Visa', 'MasterCard' => 'MasterCard',  'Discover' => 'Discover', 'American_Express' => 'American Express',  'JCB' => 'JCB');
 			$this->frm->available_cards_all = $available_cards_all;
 			if(!count($this->frm->available_cards)) 
 			{				
 				$this->frm->available_cards = array();
 				$this->frm->available_cards['Visa']		= 'Visa';
-				$this->frm->available_cards['American_Express']	= 'American Express';
-				$this->frm->available_cards['Discover']	= 'Discover';
 				$this->frm->available_cards['MasterCard']	= 'MasterCard';
+				$this->frm->available_cards['Discover']	= 'Discover';
+				$this->frm->available_cards['American_Express']	= 'American Express';			
 				$this->frm->available_cards['JCB']	= 'JCB';				
 			}
 			$this->frm->email_customer = $this->plugin->options['email_customer'];

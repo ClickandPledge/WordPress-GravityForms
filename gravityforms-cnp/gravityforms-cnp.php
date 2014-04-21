@@ -3,7 +3,7 @@
 Plugin Name: Gravity Forms Click & Pledge
 Plugin URI: http://clickandpledge.com/
 Description: Integrates Gravity Forms with Click & Pledge payment gateway, enabling end users to purchase goods and services through Gravity Forms.
-Version: 1.0
+Version: 1.1
 Author: Click & Pledge
 Author URI: http://manual.clickandpledge.com/
 */
@@ -55,6 +55,7 @@ function gfcnp_autoload($class_name) {
 		'GFCnpRecurringField'				=> 'class.GFCnpRecurringField.php',
 		'GFCnpRecurringPayment'			=> 'class.GFCnpRecurringPayment.php',
 		'GFCnpStoredPayment'				=> 'class.GFCnpStoredPayment.php',
+		'GFCnpData'				=> 'class.GFCnpData.php',
 	);
 
 	if (isset($classMap[$class_name])) {
