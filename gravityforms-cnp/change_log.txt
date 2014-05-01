@@ -1,9 +1,12 @@
------------------------------------------------------------------------------
-Version 1.1
-    - Fixed validation issue on using multi payment gateways.
-    - Added support for multiple payment gateways to be configured using the same form and executed based on condition.
-
------------------------------------------------------------------------------
-Version 1.0.beta
-    - Added ability to specify mode (Production or Test) on settings page
-
+-----------------------------------------------------------------------------
+Version 1.2    
+- Fixed issue while saving payment options in admin.  
+
+-----------------------------------------------------------------------------
+Version 1.1    
+- Fixed validation issue on using multi payment gateways.    
+- Added support for multiple payment gateways to be configured using the same form and executed based on condition.
+
+-----------------------------------------------------------------------------
+Version 1.0.beta    
+- Added ability to specify mode (Production or Test) on settings page

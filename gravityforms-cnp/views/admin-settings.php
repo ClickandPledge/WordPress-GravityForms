@@ -39,7 +39,7 @@
 			</td>
 		</tr>
 		
-		<tr valign='top'>
+		<tr valign='top' id='OrganizationInformation_tr'>
 			<th>Organization information</th>
 			<td>
 				<textarea name="OrganizationInformation" id="OrganizationInformation" class="regular-text" rows="4" cols="53"><?php echo esc_attr($this->frm->OrganizationInformation); ?></textarea><br>
@@ -48,7 +48,7 @@ Maximum: 1500 characters, the following HTML tags are allowed:
 			</td>
 		</tr>
 		
-		<tr valign='top'>
+		<tr valign='top' id='ThankYouMessage_tr'>
 			<th>Thank You message</th>
 			<td>
 				<textarea name="ThankYouMessage" id="ThankYouMessage" class="regular-text" rows="4" cols="53"><?php echo esc_attr($this->frm->ThankYouMessage); ?></textarea><br>
@@ -57,7 +57,7 @@ Maximum: 500 characters, the following HTML tags are allowed:
 			</td>
 		</tr>
 		
-		<tr valign='top'>
+		<tr valign='top' id='TermsCondition_tr'>
 			<th>Terms & Conditions</th>
 			<td>
 				<textarea name="TermsCondition" id="TermsCondition" class="regular-text" rows="4" cols="53"><?php echo esc_attr($this->frm->TermsCondition); ?></textarea><br>
@@ -84,59 +84,7 @@ To be added at the bottom of the receipt. Typically the text provides proof that
 			</td>
 		</tr>
 		
-		<!--
-		<tr valign='top'>
-			<th>Recurring Transaction</th>
-			<td>
-				<label>
-				<select name="isRecurring" id="isRecurring">
-					<option value="0" <?php if($this->frm->isRecurring == 0) echo 'selected';?>>Disable</option>
-					<option value="1" <?php if($this->frm->isRecurring == 1) echo 'selected';?>>Enable</option>
-				</select>
-				</label>	
-			</td>
-		</tr>
 		
-		<tr valign='top' id="Periodicity_tr">
-			<th>Periods</th>
-			<td>
-				<?php
-				//print_r($this->frm->available_cards_all);
-				$this->frm->available_periods_all = array('Week' => 'Week', 'Weeks_2' => '2 Weeks', 'Month' => 'Month', 'Months_2' => '2 Months', 'Quarter' => 'Quarter', 'Months_6' => '6 Months', 'Year' => 'Year');
-				foreach($this->frm->available_periods_all as $card => $value) {
-					if(in_array($card, $this->frm->available_periods_all)) {
-					echo '<input type="checkbox" name="'.$card.'" id="'.$card.'" value="'.$value.'" checked>&nbsp;'.$value.'<br>';
-					} else {
-					echo '<input type="checkbox" name="'.$card.'" id="'.$card.'" value="'.$value.'">&nbsp;'.$value.'<br>';
-					}
-				}					
-				?>
-			</td>
-		</tr>
-		
-		<tr valign='top' id="RecurringMethod_tr">
-			<th>Recurring Methods</th>
-			<td>
-				<input type="checkbox" name="Subscription" id="Subscription" value="Subscription" <?php if(isset($this->frm->RecurringMethods['Subscription']) && $this->frm->RecurringMethods['Subscription'] == 'Subscription') { ?>checked<?php } ?>>Subscription<br>
-				<label id="maxrecurrings_Subscription_label">
-					<input type="text" name="maxrecurrings_Subscription" id="maxrecurrings_Subscription" value="<?php echo esc_attr($this->frm->maxrecurrings_Subscription); ?>">Subscription Max. Recurrings Allowed<br>
-				</label>
-				
-				<input type="checkbox" name="Installment" id="Installment" value="Installment" <?php  if(isset($this->frm->RecurringMethods['Installment']) && $this->frm->RecurringMethods['Installment']=='Installment') { ?>checked<?php } ?>>Installment<br>
-				<label id="maxrecurrings_Installment_label">
-					<input type="text" name="maxrecurrings_Installment" id="maxrecurrings_Installment" value="<?php echo esc_attr($this->frm->maxrecurrings_Installment); ?>">Installment Max. Recurrings Allowed<br>
-				</label>				
-				
-			</td>
-		</tr>
-		
-		<tr valign='top' id="indefinite_tr">
-			<th>Enable Indefinite recurring</th>
-			<td>
-				<input type="checkbox" name="indefinite" id="indefinite" value="yes" <?php  if(isset($this->frm->indefinite) && $this->frm->indefinite =='yes') { ?>checked<?php } ?>>		
-			</td>
-		</tr>
-		-->
 		<script>
 			
 			jQuery(document).ready(function(){
@@ -192,78 +140,6 @@ To be added at the bottom of the receipt. Typically the text provides proof that
 						jQuery('#Visa').focus();
 						return false;
 					}
-					
-					/*
-					if(jQuery('#isRecurring').val() == 1)
-					{
-						if(jQuery('#RecurringLabel').val() == '')
-						{
-						alert('Please enter Label');
-						jQuery('#RecurringLabel').focus();
-						return false;
-						}
-					}
-					
-					if(jQuery('#Installment').is(':checked') && jQuery('#maxrecurrings_Installment').val() != '')
-					{
-						if(!jQuery.isNumeric((jQuery('#maxrecurrings_Installment').val())))
-						{
-							alert('Please enter valid number. It will allow numbers only');
-							jQuery('#maxrecurrings_Installment').focus();
-							return false;
-						}
-						if(!isInt(jQuery('#maxrecurrings_Installment').val()))
-						{
-							alert('Please enter integer values only');
-							jQuery('#maxrecurrings_Installment').focus();
-							return false;
-						}
-						if(jQuery('#maxrecurrings_Installment').val() < 2)
-						{
-							alert('Please enter value greater than 1');
-							jQuery('#maxrecurrings_Installment').focus();
-							return false;
-						}
-						if(jQuery('#maxrecurrings_Installment').val() > 998)
-						{
-							alert('Please enter value between 2-998');
-							jQuery('#maxrecurrings_Installment').focus();
-							return false;
-						}
-					}
-					function isInt(n) {
-						return n % 1 === 0;
-					}
-					if(jQuery('#Subscription').is(':checked') && jQuery('#maxrecurrings_Subscription').val() != '')
-					{
-						if(!jQuery.isNumeric((jQuery('#maxrecurrings_Subscription').val())))
-						{
-						alert('Please enter valid number. It will allow numbers only');
-						jQuery('#maxrecurrings_Subscription').focus();
-						return false;
-						}
-						
-						if(!isInt(jQuery('#maxrecurrings_Subscription').val()))
-						{
-							alert('Please enter integer values only');
-							jQuery('#maxrecurrings_Subscription').focus();
-							return false;
-						}
-						
-						if(jQuery('#maxrecurrings_Subscription').val() < 2)
-						{
-							alert('Please enter value greater than 1');
-							jQuery('#maxrecurrings_Subscription').focus();
-							return false;
-						}
-						if(jQuery('#maxrecurrings_Subscription').val() > 999)
-						{
-							alert('Please enter value between 2-999');
-							jQuery('#maxrecurrings_Subscription').focus();
-							return false;
-						}
-					}
-					*/
 				});
 				
 				function limitText(limitField, limitCount, limitNum) {
@@ -273,6 +149,29 @@ To be added at the bottom of the receipt. Typically the text provides proof that
 						limitCount.html (limitNum - limitField.val().length);
 					}
 				}
+				
+				/*
+				if(jQuery('#email_customer').is(':checked')) {
+					jQuery('#OrganizationInformation_tr').show();
+					jQuery('#ThankYouMessage_tr').show();
+					jQuery('#TermsCondition_tr').show();
+				} else {
+					jQuery('#OrganizationInformation_tr').hide();
+					jQuery('#ThankYouMessage_tr').hide();
+					jQuery('#TermsCondition_tr').hide();
+				}
+				jQuery('#email_customer').click(function(){
+					if(jQuery('#email_customer').is(':checked')) {
+						jQuery('#OrganizationInformation_tr').show();
+						jQuery('#ThankYouMessage_tr').show();
+						jQuery('#TermsCondition_tr').show();
+					} else {
+						jQuery('#OrganizationInformation_tr').hide();
+						jQuery('#ThankYouMessage_tr').hide();
+						jQuery('#TermsCondition_tr').hide();
+					}
+				});
+				*/
 				//OrganizationInformation
 				jQuery('#OrganizationInformation').keydown(function(){
 					limitText(jQuery('#OrganizationInformation'),jQuery('#OrganizationInformation_countdown'),1500);
@@ -294,80 +193,10 @@ To be added at the bottom of the receipt. Typically the text provides proof that
 				jQuery('#TermsCondition').keyup(function(){
 					limitText(jQuery('#TermsCondition'),jQuery('#TermsCondition_countdown'),1500);
 				});
-				/*
-				if(jQuery('#isRecurring').val() == 1) {
-					jQuery('#Periodicity_tr').show();						
-					jQuery('#RecurringMethod_tr').show();						
-					jQuery('#indefinite_tr').show();
-				} else {
-					jQuery('#Periodicity_tr').closest('tr').hide();					
-					jQuery('#RecurringMethod_tr').hide();						
-					jQuery('#indefinite_tr').hide();
-				}
-				if(jQuery('#Installment').is(':checked')) {
-						jQuery('#maxrecurrings_Installment_label').show();
-					} else {
-					jQuery('#maxrecurrings_Installment_label').hide();
-					}
-				jQuery('#Installment').click(function(){
-					if(jQuery('#Installment').is(':checked')) {
-						jQuery('#maxrecurrings_Installment_label').show();
-					} else {
-					jQuery('#maxrecurrings_Installment_label').hide();
-					}
-				});
 				
-				if(jQuery('#Subscription').is(':checked')) {
-						jQuery('#maxrecurrings_Subscription_label').show();
-					} else {
-					jQuery('#maxrecurrings_Subscription_label').hide();
-					}
-				jQuery('#Subscription').click(function(){
-					if(jQuery('#Subscription').is(':checked')) {
-						jQuery('#maxrecurrings_Subscription_label').show();
-					} else {
-					jQuery('#maxrecurrings_Subscription_label').hide();
-					}
-				});
-				
-				jQuery('#isRecurring').change(function(){
-					if(jQuery('#isRecurring').val() == 1) {
-						jQuery('#Periodicity_tr').show();						
-						jQuery('#RecurringMethod_tr').show();
-						jQuery('#indefinite_tr').show();						
-					} else {
-						jQuery('#Periodicity_tr').hide();						
-						jQuery('#RecurringMethod_tr').hide();
-						jQuery('#indefinite_tr').hide();	
-					}
-				});
-				*/
 			});
 			</script>
 			
-		<?php
-		/*
-		$errNames = array (
-			GFCNP_ERROR_ALREADY_SUBMITTED,
-			GFCNP_ERROR_NO_AMOUNT,
-			GFCNP_ERROR_REQ_CARD_HOLDER,
-			GFCNP_ERROR_REQ_CARD_NAME,
-			GFCNP_ERROR_EWAY_FAIL,
-		);
-		foreach ($errNames as $errName) {
-			$defmsg = esc_html($this->plugin->getErrMsg($errName, true));
-			$msg = esc_attr(get_option($errName));
-			?>
-
-			<tr>
-				<th><?php echo $defmsg; ?></th>
-				<td><input type="text" name="<?php echo esc_attr($errName); ?>" class="large-text" value="<?php echo $msg; ?>" /></td>
-			</tr>
-
-			<?php
-		}
-*/
-		?>
 	</table>
 	<p class="submit">
 	<input type="submit" name="Submit" class="button-primary" value="Save Changes" />

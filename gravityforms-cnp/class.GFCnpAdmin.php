@@ -19,11 +19,11 @@ class GFCnpAdmin {
 		if (class_exists('GFCommon')) {
 			if (version_compare(GFCommon::$version, '1.6.99999', '<')) {
 				// pre-v1.7 settings
-				$this->settingsURL = admin_url('admin.php?page=gf_settings&addon=C%26P+Payments');
+				$this->settingsURL = admin_url('admin.php?page=gf_settings&addon=Click+%26+Pledge');
 			}
 			else {
 				// post-v1.7 settings
-				$this->settingsURL = admin_url('admin.php?page=gf_settings&subview=C%26P+Payments');
+				$this->settingsURL = admin_url('admin.php?page=gf_settings&subview=Click+%26+Pledge');
 			}
 		}
 

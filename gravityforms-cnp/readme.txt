@@ -6,7 +6,7 @@ Author URI: http://clickandpledge.com/
 Tags: gravityforms, gravity forms, gravity, cnp, donation, donations, payment, recurring, ecommerce, credit cards, click & pledge, pledge
 Requires at least: 3.7.1
 Tested up to: 3.9
-Stable tag: 1.1
+Stable tag: 1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
