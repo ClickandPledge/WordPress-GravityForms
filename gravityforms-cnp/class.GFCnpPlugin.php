@@ -141,14 +141,10 @@ class GFCnpPlugin {
 			
 			// make sure form hasn't already been submitted / processed			
 			if ($this->hasFormBeenProcessed($data['form'])) 
-			//if($this->is_submitted)
 			{
-				
-				$data['is_valid'] = false;
-				
+				$data['is_valid'] = false;				
 				$formData->ccField['failed_validation'] = true;
-				$formData->ccField['validation_message'] = $this->getErrMsg(GFCNP_ERROR_ALREADY_SUBMITTED);
-				
+				$formData->ccField['validation_message'] = $this->getErrMsg(GFCNP_ERROR_ALREADY_SUBMITTED);				
 			}
 
 			// make that this is the last page of the form and that we have a credit card field and something to bill
@@ -228,12 +224,11 @@ class GFCnpPlugin {
 						// if no errors, try to bill it
 						if ($data['is_valid']) {
 							$data = $this->processSinglePayment($data, $formData);
-							//$data['is_valid'] = false;
 						}
 					}
 				}
 			}
-
+			
 			// if errors, send back to credit card page
 			if (!$data['is_valid']) {
 				GFFormDisplay::set_current_page($data['form']['id'], $formData->ccField['pageNumber']);
@@ -279,7 +274,7 @@ class GFCnpPlugin {
 			
 			$cnp->sslVerifyPeer = $this->options['sslVerifyPeer'];
 			if (empty($formData->firstName) && empty($formData->lastName)) {
-				$cnp->lastName = $formData->ccName;				// pick up card holder's name for last name
+				$cnp->lastName = $formData->ccName;// pick up card holder's name for last name
 			}
 			else {
 				$cnp->firstName = $formData->firstName;

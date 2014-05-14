@@ -1,4 +1,9 @@
 -----------------------------------------------------------------------------
+Version 1.2.1    
+- Fixed issue for special characters handling in XML.
+- Added Form ID while assigning forms to C&P Payment Gateway form  
+
+-----------------------------------------------------------------------------
 Version 1.2    
 - Fixed issue while saving payment options in admin.  
 

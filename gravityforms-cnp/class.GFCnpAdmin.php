@@ -378,7 +378,7 @@ HTML;
 
 
 
-                            <option value="<?php echo absint($current_form->id) ?>" <?php echo $selected; ?>><?php echo esc_html($current_form->title) ?></option>
+                            <option value="<?php echo absint($current_form->id) ?>" <?php echo $selected; ?>><?php echo esc_html($current_form->title) ?> (Form Id: <?php echo absint($current_form->id) ?>)</option>
 
 
 
