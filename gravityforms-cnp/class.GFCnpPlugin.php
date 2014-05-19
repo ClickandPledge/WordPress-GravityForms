@@ -104,6 +104,8 @@ class GFCnpPlugin {
 			// hook into Gravity Forms to handle Recurring Payments custom field
 			new GFCnpRecurringField($this);
 			
+			// hook into Gravity Forms to handle e-Check custom field
+			new GFCnpEcheckField($this);			
 		}
 
 		if (is_admin()) {
@@ -135,9 +137,13 @@ class GFCnpPlugin {
 		
 		$meta = GFCnpData::get_feed_by_form($data['form']['id']);
 		
+		
 	// make sure all other validations passed
 		if ($data['is_valid'] && count($meta)) {
 			$formData = new GFCnpFormData($data['form']);
+			
+			if($formData->isCcHidden() || $formData->isEcHidden())
+				$hiddenmethod = false;
 			
 			// make sure form hasn't already been submitted / processed			
 			if ($this->hasFormBeenProcessed($data['form'])) 
@@ -146,15 +152,27 @@ class GFCnpPlugin {
 				$formData->ccField['failed_validation'] = true;
 				$formData->ccField['validation_message'] = $this->getErrMsg(GFCNP_ERROR_ALREADY_SUBMITTED);				
 			}
+			elseif($formData->creditcardCount == 0 && $formData->echeckCount == 0) //Make sure that either Credit Card or e-Check details should enterd by user
+			{
+				$errmsg = "Error in the form. You should enter either credit card or e-Check details\n";
+				$formData->ccField['validation_message'] = $errmsg;
+				$data['is_valid'] = false;
+				$formData->ccField['failed_validation'] = true;
+			}
 
 			// make that this is the last page of the form and that we have a credit card field and something to bill
 			// and that credit card field is not hidden (which indicates that payment is being made another way)
-			else if (!$formData->isCcHidden() && $formData->isLastPage() && is_array($formData->ccField)) {
+			else if (!$hiddenmethod && $formData->isLastPage() && (is_array($formData->ccField) || is_array($formData->ecField))) {
 				
 				if (!$formData->hasPurchaseFields()) {
 					$data['is_valid'] = false;
+					if($formData->creditcardCount != 0) {
 					$formData->ccField['failed_validation'] = true;
 					$formData->ccField['validation_message'] = $this->getErrMsg(GFCNP_ERROR_NO_AMOUNT);
+					} else {
+					$formData->ecField['failed_validation'] = true;
+					$formData->ecField['validation_message'] = $this->getErrMsg(GFCNP_ERROR_NO_AMOUNT);
+					}
 				}
 				else {								
 					$hasproducts = false;
@@ -167,38 +185,87 @@ class GFCnpPlugin {
 					if($formData->creditcardCount > 1)
 					{
 						$errmsg = "Error in the form. Form should have only one Credit card field. Please contact administrator\n";
-						$formData->ccField['validation_message'] = $errmsg;
+						
 						$data['is_valid'] = false;
+						if($formData->creditcardCount != 0) {
+						$formData->ccField['validation_message'] = $errmsg;
 						$formData->ccField['failed_validation'] = true;
+						}
+						else {
+						$formData->ecField['validation_message'] = $errmsg;
+						$formData->ecField['failed_validation'] = true;
+						}
+					}
+					if($formData->echeckCount > 1)
+					{
+						$errmsg = "Error in the form. Form should have only one e-Check field. Please contact administrator\n";
+						
+						$data['is_valid'] = false;
+						if($formData->creditcardCount != 0) {
+						$formData->ccField['validation_message'] = $errmsg;
+						$formData->ccField['failed_validation'] = true;
+						}
+						else {
+						$formData->ecField['validation_message'] = $errmsg;
+						$formData->ecField['failed_validation'] = true;
+						}
 					}
 					if($formData->shippingCount > 1)
 					{
 						$errmsg = "Error in the form. Form should have only one Shipping field. Please contact administrator\n";
-						$formData->ccField['validation_message'] = $errmsg;
+						
 						$data['is_valid'] = false;
+						if($formData->creditcardCount != 0) {
+						$formData->ccField['validation_message'] = $errmsg;
 						$formData->ccField['failed_validation'] = true;
+						}
+						else {
+						$formData->ecField['validation_message'] = $errmsg;
+						$formData->ecField['failed_validation'] = true;
+						}
 					}
 					if($formData->recurringCount > 1)
 					{
 						$errmsg = "Error in the form. Form should have only one recurring field. Please contact administrator\n";
-						$formData->ccField['validation_message'] = $errmsg;
+						
 						$data['is_valid'] = false;
+						if($formData->creditcardCount != 0) {
+						$formData->ccField['validation_message'] = $errmsg;
 						$formData->ccField['failed_validation'] = true;
+						}
+						else {
+						$formData->ecField['validation_message'] = $errmsg;
+						$formData->ecField['failed_validation'] = true;
+						}
 					}
 					if (count($formData->productdetails) == 0 && $hasproducts) 
 					{
 						$errmsg = "Please select at least one product.\n";
-						$formData->ccField['validation_message'] = $errmsg;
+						
 						$data['is_valid'] = false;
+						if($formData->creditcardCount != 0) {
+						$formData->ccField['validation_message'] = $errmsg;
 						$formData->ccField['failed_validation'] = true;
+						}
+						else {
+						$formData->ecField['validation_message'] = $errmsg;
+						$formData->ecField['failed_validation'] = true;
+						}
 					}
 					//Here we need to validate quantity field					
 					if ($formData->amount == 0 && count($formData->productdetails) == 0 && $hasproducts) 
 					{
 						$errmsg = "Please select at least one product.\n";
-						$formData->ccField['validation_message'] = $errmsg;
+						
 						$data['is_valid'] = false;
+						if($formData->creditcardCount != 0) {
+						$formData->ccField['validation_message'] = $errmsg;
 						$formData->ccField['failed_validation'] = true;
+						}
+						else {
+						$formData->ecField['validation_message'] = $errmsg;
+						$formData->ecField['failed_validation'] = true;
+						}
 					}
 					
 					
@@ -207,17 +274,36 @@ class GFCnpPlugin {
 					if ( count($formData->productdetails) && $hasproducts ) 
 					{
 						// check for required fields
-						$required = array(
-							'ccName' => $this->getErrMsg(GFCNP_ERROR_REQ_CARD_HOLDER),
-							'ccNumber' => $this->getErrMsg(GFCNP_ERROR_REQ_CARD_NAME),
-						);
+						if($formData->creditcardCount != 0) {
+							$required = array(
+								'ccName' => $this->getErrMsg(GFCNP_ERROR_REQ_CARD_HOLDER),
+								'ccNumber' => $this->getErrMsg(GFCNP_ERROR_REQ_CARD_NAME),
+							);
+						} else {
+							$required = array(
+								'ecRouting' => $this->getErrMsg(GFCNP_ERROR_REQ_ecRouting),
+								'ecCheck' => $this->getErrMsg(GFCNP_ERROR_REQ_ecCheck),
+								'ecAccount' => $this->getErrMsg(GFCNP_ERROR_REQ_ecAccount),
+								'ecAccount_type' => $this->getErrMsg(GFCNP_ERROR_REQ_ecAccount_type),
+								'ecName' => $this->getErrMsg(GFCNP_ERROR_REQ_ecName),
+								'ecChecktype' => $this->getErrMsg(GFCNP_ERROR_REQ_ecChecktype),
+								'ecIdtype' => $this->getErrMsg(GFCNP_ERROR_REQ_ecIdtype),
+							);
+						}
 						foreach ($required as $name => $message) {
 							if (empty($formData->$name)) {
 								$data['is_valid'] = false;
-								$formData->ccField['failed_validation'] = true;
-								if (!empty($formData->ccField['validation_message']))
-									$formData->ccField['validation_message'] .= '<br />';
-								$formData->ccField['validation_message'] .= $message;
+								if($formData->creditcardCount != 0) {
+									$formData->ccField['failed_validation'] = true;
+									if (!empty($formData->ccField['validation_message']))
+										$formData->ccField['validation_message'] .= '<br />';
+									$formData->ccField['validation_message'] .= $message;
+								} else {
+									$formData->ecField['failed_validation'] = true;
+									if (!empty($formData->ecField['validation_message']))
+										$formData->ecField['validation_message'] .= '<br />';
+									$formData->ecField['validation_message'] .= $message;
+								}
 							}
 						}
 						
@@ -268,22 +354,32 @@ class GFCnpPlugin {
 	* @return array
 	*/
 	protected function processSinglePayment($data, $formData) {
-
+		
 		try {
 			$cnp = new GFCnpPayment($this->getCustomerID(), !$this->options['useTest'], $formData);
 			
 			$cnp->sslVerifyPeer = $this->options['sslVerifyPeer'];
-			if (empty($formData->firstName) && empty($formData->lastName)) {
-				$cnp->lastName = $formData->ccName;// pick up card holder's name for last name
+			if($formData->creditcardCount != 0) {
+				if (empty($formData->firstName) && empty($formData->lastName)) {
+					$cnp->lastName = $formData->ccName;// pick up card holder's name for last name
+				}
+				else {
+					$cnp->firstName = $formData->firstName;
+					$cnp->lastName = $formData->lastName;
+				}
+				$cnp->cardHoldersName = $formData->ccName;
+				$cnp->cardNumber = $formData->ccNumber;
+				$cnp->cardExpiryMonth = $formData->ccExpMonth;
+				$cnp->cardExpiryYear = $formData->ccExpYear;
+			} else {
+				$cnp->ecRouting = $formData->ecRouting;
+				$cnp->ecCheck = $formData->ecCheck;
+				$cnp->ecAccount = $formData->ecAccount;
+				$cnp->ecAccount_type = $formData->ecAccount_type;
+				$cnp->ecName = $formData->ecName;
+				$cnp->ecChecktype = $formData->ecChecktype;
+				$cnp->ecIdtype = $formData->ecIdtype;
 			}
-			else {
-				$cnp->firstName = $formData->firstName;
-				$cnp->lastName = $formData->lastName;
-			}
-			$cnp->cardHoldersName = $formData->ccName;
-			$cnp->cardNumber = $formData->ccNumber;
-			$cnp->cardExpiryMonth = $formData->ccExpMonth;
-			$cnp->cardExpiryYear = $formData->ccExpYear;
 			$cnp->emailAddress = $formData->email;
 			$cnp->address = $formData->address;
 			$cnp->postcode = $formData->postcode;
@@ -322,7 +418,8 @@ class GFCnpPlugin {
 					'payment_amount' => $cnp->amount,
 					'transaction_type' => 1,
 					'authcode' => $VaultGUID,
-				);				
+				);
+				//$data['is_valid'] = false;				
 			}
 			else {
 				$data['is_valid'] = false;
@@ -342,9 +439,15 @@ class GFCnpPlugin {
 						$AdditionalInfo = 'Unknown error';
 					}
 				}
-				//print_r($this->responsecodes);
-				//die();
+				
+				if($formData->creditcardCount != 0) {
+				$formData->ccField['failed_validation'] = true;
 				$formData->ccField['validation_message'] = nl2br($this->getErrMsg(GFCNP_ERROR_FAIL) . ":\n{$AdditionalInfo}");
+				} else {
+				$formData->ecField['failed_validation'] = true;
+				$formData->ecField['validation_message'] = nl2br($this->getErrMsg(GFCNP_ERROR_FAIL) . ":\n{$AdditionalInfo}");
+				}
+				
 				$this->txResult = array (
 					'payment_status' => 'Failed',
 				);
@@ -356,8 +459,14 @@ class GFCnpPlugin {
 			$this->txResult = array (
 				'payment_status' => 'Failed',
 			);
+			if($formData->creditcardCount != 0) {
 			$formData->ccField['failed_validation'] = true;
 			$formData->ccField['validation_message'] = nl2br($this->getErrMsg(GFCNP_ERROR_FAIL) . ":\n{$e->getMessage()}");
+			} else {
+			$formData->ecField['failed_validation'] = true;
+			$formData->ecField['validation_message'] = nl2br($this->getErrMsg(GFCNP_ERROR_FAIL) . ":\n{$e->getMessage()}");
+			}
+			
 			$errmsg = nl2br($this->getErrMsg(GFCNP_ERROR_FAIL) . ":\n{$e->getMessage()}");
 		}
 
@@ -519,10 +628,18 @@ class GFCnpPlugin {
 	public function getErrMsg($errName, $useDefault = false) {
 		static $messages = array (
 			GFCNP_ERROR_ALREADY_SUBMITTED		=> 'Payment already submitted and processed - please close your browser window',
-			GFCNP_ERROR_NO_AMOUNT				=> 'This form has credit card fields, but no products or totals',
+			GFCNP_ERROR_NO_AMOUNT				=> 'This form has credit card/eCheck fields, but no products or totals',
 			GFCNP_ERROR_REQ_CARD_HOLDER		=> 'Card holder name is required for credit card processing',
 			GFCNP_ERROR_REQ_CARD_NAME			=> 'Card number is required for credit card processing',
 			GFCNP_ERROR_FAIL				=> 'Error processing card transaction',
+			
+			GFCNP_ERROR_REQ_ecRouting		=> 'Routing Number is required for e-Check processing',
+			GFCNP_ERROR_REQ_ecCheck		=> 'Check Number is required for e-Check processing',
+			GFCNP_ERROR_REQ_ecAccount		=> 'Account Number is required for e-Check processing',
+			GFCNP_ERROR_REQ_ecAccount_type		=> 'Account Type is required for e-Check processing',
+			GFCNP_ERROR_REQ_ecName		=> 'Name on Account is required for e-Check processing',
+			GFCNP_ERROR_REQ_ecChecktype		=> 'Check Type is required for e-Check processing',
+			GFCNP_ERROR_REQ_ecIdtype		=> 'Type of ID is required for e-Check processing',
 		);
 
 		// default

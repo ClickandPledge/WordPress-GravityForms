@@ -12,6 +12,16 @@ class GFCnpFormData {
 	public $ccExpMonth = '';
 	public $ccExpYear = '';
 	public $ccCVN = '';
+	
+	//e-Check
+	public $ecRouting = '';
+	public $ecCheck = '';
+	public $ecAccount = '';	
+	public $ecAccount_type = '';
+	public $ecName = '';
+	public $ecChecktype = '';
+	public $ecIdtype = '';
+	
 	public $namePrefix = '';
 	public $firstName = '';
 	public $lastName = '';
@@ -34,6 +44,7 @@ class GFCnpFormData {
 	public $phone = '';							// phone number, for recurring payments
 	public $recurring = FALSE;					// false, or an array of inputs from complex field
 	public $ccField = FALSE;					// handle to meta-"field" for credit card in form
+	public $ecField = FALSE;					// handle to meta-"field" for e-Check in form
 	
 	public $productdetails = array();
 	public $customfields = array();
@@ -42,11 +53,13 @@ class GFCnpFormData {
 	
 	//Duplicate fields checking
 	public $creditcardCount = 0;
+	public $echeckCount = 0;
 	public $shippingCount = 0;
 	public $recurringCount = 0;
 	
 	private $isLastPageFlag = FALSE;
 	private $isCcHiddenFlag = FALSE;
+	private $isEcheckHiddenFlag = FALSE;
 	private $hasPurchaseFieldsFlag = FALSE;
 
 	/**
@@ -164,7 +177,6 @@ class GFCnpFormData {
 					break;
 
 				case 'creditcard':
-					$this->creditcardCount++;
 					$this->isCcHiddenFlag = RGFormsModel::is_field_hidden($form, $field, RGForms::post('gform_field_values'));
 					$this->ccField =& $field;
 					$this->ccName = rgpost("input_{$id}_5");
@@ -173,6 +185,25 @@ class GFCnpFormData {
 					if (is_array($ccExp))
 						list($this->ccExpMonth, $this->ccExpYear) = $ccExp;
 					$this->ccCVN = rgpost("input_{$id}_3");
+					if($this->ccNumber != '' && $this->ccName != '' && $this->ccExpMonth != '' && $this->ccExpYear != '' && $this->ccCVN != '') {
+					$this->creditcardCount++;
+					}
+					break;
+					
+				case 'gfcnpecheck':
+					$this->isEcheckHiddenFlag = RGFormsModel::is_field_hidden($form, $field, RGForms::post('gform_field_values'));
+					$this->ecField =& $field;
+					$echeck = rgpost('gfp_' . $id);
+					$this->ecRouting = $echeck['routing'];
+					$this->ecCheck = $echeck['check'];
+					$this->ecAccount = $echeck['account'];
+					$this->ecAccount_type = $echeck['account_type'];
+					$this->ecName = $echeck['name'];
+					$this->ecChecktype = $echeck['checktype'];
+					$this->ecIdtype = $echeck['idtype'];
+					if($this->ecRouting && $this->ecCheck && $this->ecAccount && $this->ecAccount_type && $this->ecName && $this->ecChecktype && $this->ecIdtype) {
+					$this->echeckCount++;
+					}
 					break;
 
 				case 'total':
@@ -480,6 +511,14 @@ class GFCnpFormData {
 	*/
 	public function isCcHidden() {
 		return $this->isCcHiddenFlag;
+	}
+	
+	/**
+	* check whether EC field is hidden (which indicates that payment is being made another way)
+	* @return boolean
+	*/
+	public function isEcHidden() {
+		return $this->isEcheckHiddenFlag;
 	}
 
 	/**

@@ -1,4 +1,8 @@
 -----------------------------------------------------------------------------
+Version 2.0.0    
+- Added eCheck feature.
+
+-----------------------------------------------------------------------------
 Version 1.2.1    
 - Fixed issue for special characters handling in XML.
 - Added Form ID while assigning forms to C&P Payment Gateway form  

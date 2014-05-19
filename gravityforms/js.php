@@ -753,6 +753,12 @@ function CanFieldBeAdded(type){
                 return false;
             }
         break;
+		case "gfcnpecheck" :
+            if(GetFieldsByType(["gfcnpecheck"]).length > 0){
+                alert("<?php _e("Only one eCheck field can be added to the form", "gravityforms") ?>");
+                return false;
+            }
+        break;
     }
     return true;
 }

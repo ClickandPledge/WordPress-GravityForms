@@ -145,13 +145,16 @@ class GFCnpPayment {
 			$errmsg .= "GUID cannot be empty. Please contact administrator\n";
 			$adminerrors = true;
 		}
-		if ($formData->firstName == '' || $formData->lastName == '') {
-			if($formData->firstName == '')
-			$errmsg .= "Form should contain First Name field and you should enter First Name. Please contact administrator.\n";
-			if($formData->lastName == '')
-			$errmsg .= "Form should contain Last Name field and you should enter Last Name. Please contact administrator.\n";
-			$adminerrors = true;
+		if($formData->creditcardCount != 0) {
+			if ($formData->firstName == '' || $formData->lastName == '') {
+				if($formData->firstName == '')
+				$errmsg .= "Form should contain First Name field and you should enter First Name. Please contact administrator.\n";
+				if($formData->lastName == '')
+				$errmsg .= "Form should contain Last Name field and you should enter Last Name. Please contact administrator.\n";
+				$adminerrors = true;
+			}
 		}
+		
 		if(isset($formData->shippingfields) && count($formData->shippingfields) && $formData->address_street == '') {
 			$errmsg .= "Form contains shipping fields but do not have shipping address. Please contact administrator.\n";
 			$adminerrors = true;
@@ -199,55 +202,60 @@ class GFCnpPayment {
 		if((isset($formData->recurring)) && ($formData->recurring['isRecurring'] == 'yes') && $this->amount == 0) {
 			$errmsg .= "amount must be greater than zero for recurring transaction.\n";
 		}
-		if (strlen($this->cardHoldersName) === 0)
-			$errmsg .= "card holder's name cannot be empty.\n";
-		if (strlen($this->cardNumber) === 0)
-			$errmsg .= "card number cannot be empty.\n";
+		if($formData->creditcardCount != 0) {
+			if (strlen($this->cardHoldersName) === 0)
+				$errmsg .= "card holder's name cannot be empty.\n";
+			if (strlen($this->cardNumber) === 0)
+				$errmsg .= "card number cannot be empty.\n";
 
-		// make sure that card expiry month is a number from 1 to 12
-		if (gettype($this->cardExpiryMonth) != 'integer') {
-			if (strlen($this->cardExpiryMonth) === 0)
-				$errmsg .= "card expiry month cannot be empty.\n";
-			else if (!is_numeric($this->cardExpiryMonth))
-				$errmsg .= "card expiry month must be a number between 1 and 12.\n";
-			else
-				$this->cardExpiryMonth = intval($this->cardExpiryMonth);
-		}
-		if (gettype($this->cardExpiryMonth) == 'integer') {
-			if ($this->cardExpiryMonth < 1 || $this->cardExpiryMonth > 12)
-				$errmsg .= "card expiry month must be a number between 1 and 12.\n";
-		}
-
-		// make sure that card expiry year is a 2-digit or 4-digit year >= this year
-		if (gettype($this->cardExpiryYear) != 'integer') {
-			if (strlen($this->cardExpiryYear) === 0)
-				$errmsg .= "card expiry year cannot be empty.\n";
-			else if (!preg_match('/^\d\d(\d\d)?$/', $this->cardExpiryYear))
-				$errmsg .= "card expiry year must be a two or four digit year.\n";
-			else
-				$this->cardExpiryYear = intval($this->cardExpiryYear);
-		}
-		if (gettype($this->cardExpiryYear) == 'integer') {
-			$thisYear = intval(date_create()->format('Y'));
-			if ($this->cardExpiryYear < 0 || $this->cardExpiryYear >= 100 && $this->cardExpiryYear < 2000 || $this->cardExpiryYear > $thisYear + 20)
-				$errmsg .= "card expiry year must be a two or four digit year.\n";
-			else {
-				if ($this->cardExpiryYear > 100 && $this->cardExpiryYear < $thisYear)
-					$errmsg .= "card expiry year can't be in the past.\n";
-				else if ($this->cardExpiryYear < 100 && $this->cardExpiryYear < ($thisYear - 2000))
-					$errmsg .= "card expiry year can't be in the past.\n";
+			// make sure that card expiry month is a number from 1 to 12
+			if (gettype($this->cardExpiryMonth) != 'integer') {
+				if (strlen($this->cardExpiryMonth) === 0)
+					$errmsg .= "card expiry month cannot be empty.\n";
+				else if (!is_numeric($this->cardExpiryMonth))
+					$errmsg .= "card expiry month must be a number between 1 and 12.\n";
+				else
+					$this->cardExpiryMonth = intval($this->cardExpiryMonth);
 			}
-		}
+			if (gettype($this->cardExpiryMonth) == 'integer') {
+				if ($this->cardExpiryMonth < 1 || $this->cardExpiryMonth > 12)
+					$errmsg .= "card expiry month must be a number between 1 and 12.\n";
+			}
 
-		if (!is_numeric($formData->ccCVN)) {
-		$errmsg .= "Security Code should be digits only.\n";
+			// make sure that card expiry year is a 2-digit or 4-digit year >= this year
+			if (gettype($this->cardExpiryYear) != 'integer') {
+				if (strlen($this->cardExpiryYear) === 0)
+					$errmsg .= "card expiry year cannot be empty.\n";
+				else if (!preg_match('/^\d\d(\d\d)?$/', $this->cardExpiryYear))
+					$errmsg .= "card expiry year must be a two or four digit year.\n";
+				else
+					$this->cardExpiryYear = intval($this->cardExpiryYear);
+			}
+			if (gettype($this->cardExpiryYear) == 'integer') {
+				$thisYear = intval(date_create()->format('Y'));
+				if ($this->cardExpiryYear < 0 || $this->cardExpiryYear >= 100 && $this->cardExpiryYear < 2000 || $this->cardExpiryYear > $thisYear + 20)
+					$errmsg .= "card expiry year must be a two or four digit year.\n";
+				else {
+					if ($this->cardExpiryYear > 100 && $this->cardExpiryYear < $thisYear)
+						$errmsg .= "card expiry year can't be in the past.\n";
+					else if ($this->cardExpiryYear < 100 && $this->cardExpiryYear < ($thisYear - 2000))
+						$errmsg .= "card expiry year can't be in the past.\n";
+				}
+			}
+
+			if (!is_numeric($formData->ccCVN)) {
+			$errmsg .= "Security Code should be digits only.\n";
+			}
+			if (strlen($formData->ccCVN) > 4)
+				$errmsg .= "CVV should be 3 or 4 digits only.\n";
+			if (strlen($formData->ccName) == 1)
+				$errmsg .= "Cardholder Name should be 2 to 50 characters length.\n";
+			if (strlen($formData->ccName) > 50)
+				$errmsg .= "Cardholder Name should not exceed 50 characters length.\n";
+		} else {
+			if (strlen($formData->ecRouting) > 9)
+				$errmsg .= "Routing Number should be max 9 digits only.\n";
 		}
-		if (strlen($formData->ccCVN) > 4)
-			$errmsg .= "CVV should be 3 or 4 digits only.\n";
-		if (strlen($formData->ccName) == 1)
-			$errmsg .= "Cardholder Name should be 2 to 50 characters length.\n";
-		if (strlen($formData->ccName) > 50)
-			$errmsg .= "Cardholder Name should not exceed 50 characters length.\n";
 		}
 		
 		if (strlen($errmsg) > 0) {
@@ -289,7 +297,7 @@ class GFCnpPayment {
 	public function getPaymentXML($configValues, $orderplaced) {
 		//echo '<pre>';
 		//print_r($orderplaced);
-		//die();
+		//die('CnpPayment');
 		$dom = new DOMDocument('1.0', 'UTF-8');
 		$root = $dom->createElement('CnPAPI', '');
 		$root->setAttribute("xmlns","urn:APISchema.xsd");
@@ -310,7 +318,7 @@ class GFCnpPayment {
 		$applicationname=$dom->createElement('Name','CnP_PaaS_FM_GravityForm'); 
 		$applicationid=$application->appendChild($applicationname);
 
-		$applicationversion=$dom->createElement('Version','1.200.100.000.20140421');  //2.000.000.000.20130103 Version-Minor change-Bug Fix-Internal Release Number -Release Date
+		$applicationversion=$dom->createElement('Version','2.000.000.000.20140519');  //2.000.000.000.20130103 Version-Minor change-Bug Fix-Internal Release Number -Release Date
 		$applicationversion=$application->appendChild($applicationversion);
 
 		$request = $dom->createElement('Request', '');
@@ -346,7 +354,6 @@ class GFCnpPayment {
 		$cardholder=$dom->createElement('CardHolder','');
 		$cardholder=$order->appendChild($cardholder);
 		
-		//list($firstName, $lastName) = explode(' ', $orderplaced->ccName);
 		if($orderplaced->firstName || $orderplaced->ccName) {
 		$billinginfo=$dom->createElement('BillingInformation','');
 		$billinginfo=$cardholder->appendChild($billinginfo);
@@ -355,8 +362,6 @@ class GFCnpPayment {
 		$billfirst_name=$dom->createElement('BillingFirstName',$this->safeString($orderplaced->firstName,50));
 		$billfirst_name=$billinginfo->appendChild($billfirst_name);
 		}
-		
-		
 		
 		if($orderplaced->lastName) {		
 		$billlast_name=$dom->createElement('BillingLastName',$this->safeString($orderplaced->lastName,50));
@@ -541,30 +546,67 @@ class GFCnpPayment {
 		
 		$paymentmethod=$dom->createElement('PaymentMethod','');
 		$paymentmethod=$cardholder->appendChild($paymentmethod);
+		if($orderplaced->creditcardCount != 0) 
+		{
+			$payment_type=$dom->createElement('PaymentType','CreditCard');
+			$payment_type=$paymentmethod->appendChild($payment_type);
+			
+		 	$creditcard=$dom->createElement('CreditCard','');
+			$creditcard=$paymentmethod->appendChild($creditcard);
+			
+			$credit_card_name = $orderplaced->ccName;						
+			$credit_name=$dom->createElement('NameOnCard',$this->safeString( $credit_card_name, 50));
+			$credit_name=$creditcard->appendChild($credit_name);
+					
+			$credit_number=$dom->createElement('CardNumber',$this->safeString( str_replace(' ', '', $orderplaced->ccNumber), 17));
+			$credit_number=$creditcard->appendChild($credit_number);
 
-		$payment_type=$dom->createElement('PaymentType','CreditCard');
-		$payment_type=$paymentmethod->appendChild($payment_type);
+			$credit_cvv=$dom->createElement('Cvv2',$orderplaced->ccCVN);
+			$credit_cvv=$creditcard->appendChild($credit_cvv);
 
-		$creditcard=$dom->createElement('CreditCard','');
-		$creditcard=$paymentmethod->appendChild($creditcard);
-		
-		$credit_card_name = $orderplaced->ccName;						
-		$credit_name=$dom->createElement('NameOnCard',$this->safeString( $credit_card_name, 50));
-		$credit_name=$creditcard->appendChild($credit_name);
-				
-		$credit_number=$dom->createElement('CardNumber',$this->safeString( str_replace(' ', '', $orderplaced->ccNumber), 17));
-		$credit_number=$creditcard->appendChild($credit_number);
-
-		$credit_cvv=$dom->createElement('Cvv2',$orderplaced->ccCVN);
-		$credit_cvv=$creditcard->appendChild($credit_cvv);
-
-		$credit_expdate=$dom->createElement('ExpirationDate',str_pad($orderplaced->ccExpMonth,2,'0',STR_PAD_LEFT) ."/" .substr($orderplaced->ccExpYear,2,2));
-		$credit_expdate=$creditcard->appendChild($credit_expdate);
+			$credit_expdate=$dom->createElement('ExpirationDate',str_pad($orderplaced->ccExpMonth,2,'0',STR_PAD_LEFT) ."/" .substr($orderplaced->ccExpYear,2,2));
+			$credit_expdate=$creditcard->appendChild($credit_expdate);
+		} 
+		else 
+		{
+			
+			$payment_type=$dom->createElement('PaymentType','Check');
+			$payment_type=$paymentmethod->appendChild($payment_type);
+			
+			$echeck=$dom->createElement('Check','');
+			$echeck=$paymentmethod->appendChild($echeck);
+			
+			$ecAccount=$dom->createElement('AccountNumber',$this->safeString( $orderplaced->ecAccount, 17));
+			$ecAccount=$echeck->appendChild($ecAccount);
+			
+			$ecAccount_type=$dom->createElement('AccountType',$orderplaced->ecAccount_type);
+			$ecAccount_type=$echeck->appendChild($ecAccount_type);
+			
+			$ecRouting=$dom->createElement('RoutingNumber',$this->safeString( $orderplaced->ecRouting, 9));
+			$ecRouting=$echeck->appendChild($ecRouting);
+			
+			$ecCheck=$dom->createElement('CheckNumber',$this->safeString( $orderplaced->ecCheck, 10));
+			$ecCheck=$echeck->appendChild($ecCheck);
+			
+			$ecChecktype=$dom->createElement('CheckType',$orderplaced->ecChecktype);
+			$ecChecktype=$echeck->appendChild($ecChecktype);
+			
+			$ecName=$dom->createElement('NameOnAccount',$this->safeString( $orderplaced->ecName, 100));
+			$ecName=$echeck->appendChild($ecName);
+			
+			$ecIdtype=$dom->createElement('IdType',$orderplaced->ecIdtype);
+			$ecIdtype=$echeck->appendChild($ecIdtype);
+			/*
+			$IdNumber=$dom->createElement('IdNumber',$this->safeString( $orderplaced->ecIdNumber, 30));
+			$IdNumber=$creditcard->appendChild($IdNumber);
+			
+			$IdStateCode=$dom->createElement('IdStateCode', $orderplaced->ecIdStateCode);
+			$IdStateCode=$creditcard->appendChild($IdStateCode);
+			*/
+		}
 		
 		$total_calculate = 0;
-		//echo '<pre>';
-		//print_r($orderplaced->productdetails);
-		//die();
+		
 		//Products processing
 		if(isset($orderplaced->productdetails) && count($orderplaced->productdetails))
 		{
@@ -650,12 +692,7 @@ class GFCnpPayment {
 							$id = substr($id, 0, -1);
 							$val = '';
 							}
-							//echo $id;
-							//echo $id.'#'.$pr['ItemID'].'<br>';
-							//$id = substr($sub['FieldName'], 14);
-							//print_r($parts);
-							//echo $OptionValue.'#'.substr($parts[1],0,-1);
-							//echo '<br>';
+
 							if($id == $pr['ItemID'] && $OptionValue == substr($parts[1],0,-1)) 
 							{
 								

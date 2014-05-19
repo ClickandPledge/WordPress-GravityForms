@@ -4,7 +4,7 @@ form editor for Recurring Payments field
 */
 
 // create namespace to avoid collisions
-var GFCnpRecurring = (function($) {
+var GFCnpEcheck = (function($) {
 
 	return {
 		/**
@@ -42,7 +42,7 @@ var GFCnpRecurring = (function($) {
 		* toggle whether to show the Start Date and End Date fields
 		* @param {HTMLElement} field
 		*/
-		ToggleRecurringDateSetting : function(field) {
+		ToggleEcheckDateSetting : function(field) {
 			SetFieldProperty(field.id, field.checked);
 			if (field.checked) {
 				$("#gfcnp_recurring_date_fields").slideDown();
@@ -59,7 +59,7 @@ var GFCnpRecurring = (function($) {
 jQuery(function($) {
 
 	// add required classes to the field on the admin form
-	fieldSettings.gfcnprecurring = ".conditional_logic_field_setting, .error_message_setting, .label_setting, .admin_label_setting, .rules_setting, .description_setting, .css_class_setting, .gfcnpsku_setting";
+	fieldSettings.gfcnprecurring = ".conditional_logic_field_setting, .error_message_setting, .label_setting, .admin_label_setting, .rules_setting, .description_setting, .css_class_setting, .gfcnpecheck_setting";
 
 	// binding to the load field settings event to initialize custom inputs
 	$(document).bind("gform_load_field_settings", function(event, field, form) {
@@ -69,9 +69,9 @@ jQuery(function($) {
 			$("#gfcnp_initial_fields").hide();
 		}
 
-		$("#gfcnp_recurring_date_setting").prop("checked", !!field.gfcnp_recurring_date_setting);
+		$("#gfcnp_echeck_date_setting").prop("checked", !!field.gfcnp_echeck_date_setting);
 		if (!field.gfcnp_recurring_date_setting) {
-			$("#gfcnp_recurring_date_fields").hide();
+			$("#gfcnp_echeck_date_fields").hide();
 		}
 
 	});

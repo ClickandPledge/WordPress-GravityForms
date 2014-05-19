@@ -3,7 +3,7 @@
 Plugin Name: Gravity Forms Click & Pledge
 Plugin URI: http://clickandpledge.com/
 Description: Integrates Gravity Forms with Click & Pledge payment gateway, enabling end users to purchase goods and services through Gravity Forms.
-Version: 1.2.1
+Version: 2.0.0
 Author: Click & Pledge
 Author URI: http://manual.clickandpledge.com/
 */
@@ -38,6 +38,7 @@ if (!defined('GFCNP_PLUGIN_ROOT')) {
 
 	// custom fields
 	define('GFCNP_FIELD_RECURRING', 'gfcnprecurring');
+	define('GFCNP_FIELD_ECHECK', 'gfcnpecheck');
 }
 
 /**
@@ -53,12 +54,12 @@ function gfcnp_autoload($class_name) {
 		'GFCnpPayment'						=> 'class.GFCnpPayment.php',
 		'GFCnpPlugin'						=> 'class.GFCnpPlugin.php',
 		'GFCnpRecurringField'				=> 'class.GFCnpRecurringField.php',
-		'GFCnpRecurringPayment'			=> 'class.GFCnpRecurringPayment.php',
-		'GFCnpStoredPayment'				=> 'class.GFCnpStoredPayment.php',
-		'GFCnpData'				=> 'class.GFCnpData.php',
+		'GFCnpData'				=> 'class.GFCnpData.php',		
+		'GFCnpEcheckField'				=> 'class.GFCnpEcheckField.php',
 	);
-
+//echo $class_name.'<br>';
 	if (isset($classMap[$class_name])) {
+	
 		require GFCNP_PLUGIN_ROOT . $classMap[$class_name];
 	}
 }
