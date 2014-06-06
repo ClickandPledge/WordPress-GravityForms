@@ -269,7 +269,8 @@ class GFCnpRecurringField {
 			if (!RGFormsModel::is_field_hidden($form, $field, RGForms::post('gform_field_values')) && (isset($_POST['gfp_'.$field['id']]) && $_POST['gfp_'.$field['id']] == 'on')) {
 				// get the real values
 				$value = self::getPost($field['id']);
-
+				//print_r($value);
+				//die();
 				if (!is_array($value)) {
 					$validation_result['is_valid'] = false;
 					$validation_result['message'] = __("This field is required.", "gravityforms");
@@ -438,7 +439,7 @@ class GFCnpRecurringField {
 			);
 			$input .= $this->inputText($sub_field, $gfcnp_recurring_maxrecurrings_Subscription, $lead_id, $form_id, 'style="display:none;"', $isadmin);
 			
-			
+			//print_r($this->RecurringMethod);
 			if(count($this->RecurringMethod) > 1)
 			{
 				$id = $field['id'];
@@ -503,9 +504,11 @@ class GFCnpRecurringField {
 				jQuery('.indefinite').click(function(){
 					if(jQuery('.indefinite').is(':checked')) {
 					jQuery('.gfcnp_recurring_label').val('');
+						jQuery('.gfcnp_recurring_label').hide();
 						jQuery('.gfcnp_recurring_label').prop('readonly', true);						
 					}
 					else {						
+						jQuery('.gfcnp_recurring_label').show();
 						jQuery('.gfcnp_recurring_label').prop('readonly', false);						
 						}
 				});
@@ -645,7 +648,7 @@ class GFCnpRecurringField {
 					$Periods = $value;
 					//print_r($Periods);
 					//die('ffffff');
-					if(count($Periods) > 0) 
+					if(count($Periods) > 1) 
 					{
 						$selected = $_POST['gfcnp_'.$id];
 						$input  = "<div class='ginput_container'>$title<ul class='gfield_checkbox'><select name='gfcnp_{$id}[{$sid}]' class='".$field['label_class']."' id='$field_id' >";
@@ -669,7 +672,7 @@ class GFCnpRecurringField {
 						//print_r($Periods);
 						//print_r($keys);
 						//die('ffff');
-						echo "<input type='hidden' name='gfcnp_{$id}_Periodicity' value='".$selected."'>";
+						$input .= "<input type='hidden' name='gfcnp_{$id}[{$sid}]' value='".$selected."'>";
 					}
 				}
 				
@@ -783,12 +786,14 @@ class GFCnpRecurringField {
 		} else {
 			$input .= "<script type='text/javascript'>
 				jQuery(document).ready(function(){
-					//jQuery('.indefinite').closest('span').hide();
-					//jQuery('.gfcnp_recurring_label').closest('span').hide();
-					//jQuery('.gfcnp_Periods_label').closest('div').hide();
-					//jQuery('.RecurringMethod').hide();
-
+					
+					togglerecurring();
 					jQuery('.recurring_checkbox').click(function(){
+						togglerecurring();
+					});
+					
+					function togglerecurring()
+					{
 						if(jQuery('.recurring_checkbox').is(':checked')) {
 							jQuery('.indefinite').closest('span').show();
 							jQuery('.gfcnp_recurring_label').closest('span').show();
@@ -800,7 +805,7 @@ class GFCnpRecurringField {
 							jQuery('.gfcnp_Periods_label').closest('div').hide();
 							jQuery('.RecurringMethod').hide();
 						}
-					});
+					}
 				});			
 			</script>";
 		}
