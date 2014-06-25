@@ -319,7 +319,7 @@ class GFCnpFormData {
 
 			$qty_field = GFCommon::get_product_fields_by_type($form, array('quantity'), $id);
 			$qty = sizeof($qty_field) > 0 ? rgpost("input_{$qty_field[0]['id']}") : 1;
-//print_r($field);
+
 //echo '<br>';
 			switch ($field["inputType"]) {
 				case 'singleproduct':
@@ -432,7 +432,7 @@ class GFCnpFormData {
 						//$item_custom['FieldName'] = $field["label"];
 						//$item_custom['FieldValue'] = $name;
 						$item['productField'] = $field["productField"];
-						echo $t = $item['productField'];
+						$t = $item['productField'];
 						if($t)
 						$item['OptionValue'] = $name;
 						else

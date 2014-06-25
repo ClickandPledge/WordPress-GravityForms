@@ -1,3 +1,9 @@
+<?php
+if(!class_exists('GFForms')){
+    die();
+}
+?>
+
 <script type="text/javascript">
 var gforms_dragging = 0;
 var gforms_original_json;
@@ -580,7 +586,7 @@ function SetDefaultValues(field){
             	//convert field id to a number so it isn't treated as a string
             	//caused concatenation below instead of addition
             	field_id = parseFloat(field.id);
-                field.inputs = [new Input(field_id + 0.1, '<?php echo __("Name", "gravityforms"); ?>'), new Input(field_id + 0.2, '<?php echo __("Price", "gravityforms"); ?>'), new Input(field_id + 0.3, '<?php echo __("Quantity", "gravityforms"); ?>'), new Input(field_id + 0.4, '<?php echo __("SKU", "gravityforms"); ?>')];
+                field.inputs = [new Input(field_id + 0.1, '<?php echo __("Name", "gravityforms"); ?>'), new Input(field_id + 0.2, '<?php echo __("Price", "gravityforms"); ?>'), new Input(field_id + 0.3, '<?php echo __("Quantity", "gravityforms"); ?>')];
                 field.enablePrice = null;
             }
 
@@ -708,7 +714,6 @@ function AddCaptchaField(){
 }
 
 function CanFieldBeAdded(type){
-	
     switch(type){
         case "shipping" :
             if(GetFieldsByType(["shipping"]).length > 0){
@@ -716,6 +721,7 @@ function CanFieldBeAdded(type){
                 return false;
             }
         break;
+
         case "post_content" :
             if(GetFieldsByType(["post_content"]).length > 0){
                 alert("<?php _e("Only one Post Content field can be added to the form", "gravityforms") ?>");
@@ -744,18 +750,6 @@ function CanFieldBeAdded(type){
         case "option" :
             if(GetFieldsByType(["product"]).length <= 0){
                 alert("<?php _e("You must add a product field to the form first", "gravityforms") ?>");
-                return false;
-            }
-        break;
-		case "gfcnprecurring" :
-            if(GetFieldsByType(["gfcnprecurring"]).length > 0){
-                alert("<?php _e("Only one recurring field can be added to the form", "gravityforms") ?>");
-                return false;
-            }
-        break;
-		case "gfcnpecheck" :
-            if(GetFieldsByType(["gfcnpecheck"]).length > 0){
-                alert("<?php _e("Only one eCheck field can be added to the form", "gravityforms") ?>");
                 return false;
             }
         break;

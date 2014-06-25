@@ -295,9 +295,7 @@ class GFCnpPayment {
 	* @return string
 	*/
 	public function getPaymentXML($configValues, $orderplaced) {
-		//echo '<pre>';
-		//print_r($orderplaced);
-		//die('CnpPayment');
+		
 		$dom = new DOMDocument('1.0', 'UTF-8');
 		$root = $dom->createElement('CnPAPI', '');
 		$root->setAttribute("xmlns","urn:APISchema.xsd");
@@ -318,7 +316,7 @@ class GFCnpPayment {
 		$applicationname=$dom->createElement('Name','CnP_PaaS_FM_GravityForm'); 
 		$applicationid=$application->appendChild($applicationname);
 
-		$applicationversion=$dom->createElement('Version','2.000.000.000.20140519');  //2.000.000.000.20130103 Version-Minor change-Bug Fix-Internal Release Number -Release Date
+		$applicationversion=$dom->createElement('Version','2.000.002.000.20140625');  //2.000.000.000.20130103 Version-Minor change-Bug Fix-Internal Release Number -Release Date
 		$applicationversion=$application->appendChild($applicationversion);
 
 		$request = $dom->createElement('Request', '');
@@ -615,7 +613,7 @@ class GFCnpPayment {
 			$p = 0;	
 			foreach ( $orderplaced->productdetails as  $pr) 
 			{
-				if($pr['productField'] == '' ) 
+				//if($pr['productField'] == '' ) 
 				{
 					$OptionValue = '';
 					$orderitem=$dom->createElement('OrderItem','');

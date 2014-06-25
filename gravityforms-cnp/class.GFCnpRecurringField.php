@@ -426,6 +426,8 @@ class GFCnpRecurringField {
 			$Periods = array();
 			if(isset($field['Subscription']) && $field['Subscription'] == 1)
 			$Periods['Subscription'] = 'Subscription';
+			
+			//print_r($Periods);
 			$input .= $this->fieldCheckbox($sub_field, $Periods, $lead_id, $form_id, '', $isadmin);
 			
 			$sub_field = array (
@@ -439,14 +441,49 @@ class GFCnpRecurringField {
 			);
 			$input .= $this->inputText($sub_field, $gfcnp_recurring_maxrecurrings_Subscription, $lead_id, $form_id, 'style="display:none;"', $isadmin);
 			
-			//print_r($this->RecurringMethod);
 			if(count($this->RecurringMethod) > 1)
 			{
 				$id = $field['id'];
 				$sid = 0;
-				//echo '<pre>';
-				//print_r($_POST['gfcnp_'.$id]);
-				//echo $sid;
+				$input  .= "<div class='ginput_container RecurringMethod'>Recurring Method<ul class='gfield_checkbox'>";
+				$input .= "<select name='gfcnp_{$id}_RecurringMethod' class='$v' id='$field_id' >";
+				foreach($this->RecurringMethod as $key => $val) { 
+				$val_key = key($val);
+				$val_value = key($val[key($val)]);
+				$input .= "<option value='$val_key|$val_value'>$val_value</option>";
+				$sid++;
+				}
+				$input .= "</select>";
+				$input .= "</ul></div>";
+			}
+			else if(count($this->RecurringMethod) == 0 && !$isadmin)
+			{
+				$sub_field = array (
+				'type' => 'Recurring Method',
+				'id' => $field['id'],
+				'sub_id' => '5',
+				'label' => 'Recurring Method',
+				'value' => $Period,
+				'label_class' => 'gfcnp_Installment_label',
+				);
+				$Periods = array();				
+				$Periods['Installment'] = 'Installment';
+				$input .= $this->fieldCheckbox($sub_field, $Periods, $lead_id, $form_id, 'Recurring Method', $isadmin);
+				
+				$sub_field = array (
+				'type' => 'Recurring Method',
+				'id' => $field['id'],
+				'sub_id' => '5',
+				'label' => 'Recurring Method',
+				'value' => $Period,
+				'label_class' => 'gfcnp_Subscription_label',
+				);				
+				$Periods = array();
+				$Periods['Subscription'] = 'Subscription';
+				$input .= $this->fieldCheckbox($sub_field, $Periods, $lead_id, $form_id, '', $isadmin);
+				
+				$id = $field['id'];
+				$sid = 0;
 				$input  .= "<div class='ginput_container RecurringMethod'>Recurring Method<ul class='gfield_checkbox'>";
 				$input .= "<select name='gfcnp_{$id}_RecurringMethod' class='$v' id='$field_id' >";
 				foreach($this->RecurringMethod as $key => $val) { 
@@ -648,7 +685,22 @@ class GFCnpRecurringField {
 					$Periods = $value;
 					//print_r($Periods);
 					//die('ffffff');
-					if(count($Periods) > 1) 
+					if(count($Periods) == 0 && !$isadmin)
+					{
+						$Periods = array('Week' => 'Week', '2_Weeks' => '2 Weeks', 'Month' => 'Month', '2_Months' => '2 Months', 'Quarter' => 'Quarter', '6_Months' => '6 Months', 'Year' => 'Year');
+						$selected = $_POST['gfcnp_'.$id];
+						$input  = "<div class='ginput_container'>$title<ul class='gfield_checkbox'><select name='gfcnp_{$id}[{$sid}]' class='".$field['label_class']."' id='$field_id' >";
+						foreach($Periods as $v) { 
+						if($selected[4] == 'gfcnp_'.$id.'['.$sid.']|'.$v) {
+						$input .= "<option value='gfcnp_{$id}[{$sid}]|$v' selected>$v</option>";
+						} else {
+						$input .= "<option value='gfcnp_{$id}[{$sid}]|$v'>$v</option>";
+						}
+						$sid++;
+						}
+						$input .= "</select></ul></div>";
+					}
+					else if(count($Periods) > 1) 
 					{
 						$selected = $_POST['gfcnp_'.$id];
 						$input  = "<div class='ginput_container'>$title<ul class='gfield_checkbox'><select name='gfcnp_{$id}[{$sid}]' class='".$field['label_class']."' id='$field_id' >";
