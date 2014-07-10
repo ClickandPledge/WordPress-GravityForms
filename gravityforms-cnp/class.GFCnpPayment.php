@@ -128,9 +128,7 @@ class GFCnpPayment {
 	private function validate($options, $formData) {
 		$errmsg = '';
 		$adminerrors = false;
-		//echo '<pre>';
-		//print_r($formData);
-		//die();
+		
 		$form_currency = GFCommon::get_currency();
 		if(!in_array($form_currency, array('USD', 'EUR', 'CAD', 'GBP')))
 		{
@@ -294,8 +292,8 @@ class GFCnpPayment {
 	*
 	* @return string
 	*/
-	public function getPaymentXML($configValues, $orderplaced) {
-		
+	public function getPaymentXML($configValues, $orderplaced) 
+	{	
 		$dom = new DOMDocument('1.0', 'UTF-8');
 		$root = $dom->createElement('CnPAPI', '');
 		$root->setAttribute("xmlns","urn:APISchema.xsd");
@@ -316,7 +314,7 @@ class GFCnpPayment {
 		$applicationname=$dom->createElement('Name','CnP_PaaS_FM_GravityForm'); 
 		$applicationid=$application->appendChild($applicationname);
 
-		$applicationversion=$dom->createElement('Version','2.000.002.000.20140625');  //2.000.000.000.20130103 Version-Minor change-Bug Fix-Internal Release Number -Release Date
+		$applicationversion=$dom->createElement('Version','2.000.002.000.20140710');  //2.000.000.000.20130103 Version-Minor change-Bug Fix-Internal Release Number -Release Date
 		$applicationversion=$application->appendChild($applicationversion);
 
 		$request = $dom->createElement('Request', '');

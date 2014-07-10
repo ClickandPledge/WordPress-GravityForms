@@ -83,8 +83,15 @@ class GFCnpFormData {
 	*/
 	private function loadForm(&$form) {
 		
+		//echo '<pre>';
+		//print_r($form);
+		//die('CnpFormData');
 		foreach ($form['fields'] as &$field) {
 			$id = $field['id'];
+			//echo '<pre>';
+			//print_r($this->customfields);
+			//echo $id.'#'.RGFormsModel::get_input_type($field).'<br>';
+			//echo '<br>--------------------------------------------'.RGFormsModel::get_input_type($field).'<br><br>';
 			//echo RGFormsModel::get_input_type($field).'<br>';
 			switch(RGFormsModel::get_input_type($field)){
 				case 'name':
@@ -103,8 +110,25 @@ class GFCnpFormData {
 						if(rgpost("input_{$id}_6"))
 						$anothername .= ' ' . rgpost("input_{$id}_6");
 						$item_custom['FieldValue'] = $anothername;
+						$item_custom['FieldId'] = $id;
+						//if($item_custom['FieldValue'])
+						//$this->customfields[] = $item_custom;
 						if($item_custom['FieldValue'])
-						$this->customfields[] = $item_custom;
+						{
+							if(count($item_custom)) {
+								$hasfield = false;
+								if(count($this->customfields))
+								{
+									foreach($this->customfields as $cfield)
+									{
+										if($cfield['FieldId'] == $item_custom['FieldId'])
+										$hasfield = true;
+									}
+								}
+								if(!$hasfield)
+								$this->customfields[] = $item_custom;
+							}
+						}
 					}
 					break;
 					
@@ -117,8 +141,24 @@ class GFCnpFormData {
 					else {
 						$item_custom['FieldName'] = $field["label"];
 						$item_custom['FieldValue'] = rgpost("input_{$id}");
+						//if($item_custom['FieldValue'])
+						//$this->customfields[] = $item_custom;
 						if($item_custom['FieldValue'])
-						$this->customfields[] = $item_custom;
+						{
+							if(count($item_custom)) {
+								$hasfield = false;
+								if(count($this->customfields))
+								{
+									foreach($this->customfields as $cfield)
+									{
+										if($cfield['FieldId'] == $item_custom['FieldId'])
+										$hasfield = true;
+									}
+								}
+								if(!$hasfield)
+								$this->customfields[] = $item_custom;
+							}
+						}
 					}
 					break;
 
@@ -129,8 +169,25 @@ class GFCnpFormData {
 					} else {
 						$item_custom['FieldName'] = $field["label"];
 						$item_custom['FieldValue'] = rgpost("input_{$id}");
+						$item_custom['FieldId'] = $id;
+						//if($item_custom['FieldValue'])
+						//$this->customfields[] = $item_custom;
 						if($item_custom['FieldValue'])
-						$this->customfields[] = $item_custom;
+						{
+							if(count($item_custom)) {
+								$hasfield = false;
+								if(count($this->customfields))
+								{
+									foreach($this->customfields as $cfield)
+									{
+										if($cfield['FieldId'] == $item_custom['FieldId'])
+										$hasfield = true;
+									}
+								}
+								if(!$hasfield)
+								$this->customfields[] = $item_custom;
+							}
+						}
 					}
 					break;
 
@@ -171,8 +228,24 @@ class GFCnpFormData {
 						$str2 = implode(', ', array_filter($parts, 'strlen'));
 						
 						$item_custom['FieldValue'] = implode(', ', array_filter($str2, 'strlen'));
+						$item_custom['FieldId'] = $id;
 						if($item_custom['FieldValue'])
-						$this->customfields[] = $item_custom;
+						{
+							if(count($item_custom)) {
+								$hasfield = false;
+								if(count($this->customfields))
+								{
+									foreach($this->customfields as $cfield)
+									{
+										if($cfield['FieldId'] == $item_custom['FieldId'])
+										$hasfield = true;
+									}
+								}
+								if(!$hasfield)
+								$this->customfields[] = $item_custom;
+							}
+						}
+						//$this->customfields[] = $item_custom;
 					}
 					break;
 
@@ -232,6 +305,7 @@ class GFCnpFormData {
 					elseif(!GFCommon::is_post_field($field)) 
 					//else
 					{				
+						//echo $id.'#'.RGFormsModel::get_input_type($field).'<br>';
 						switch($field['type'])
 						{
 							case 'checkbox':
@@ -243,23 +317,24 @@ class GFCnpFormData {
 								}								
 								$item_custom['FieldName'] = $field["label"];
 								$item_custom['FieldValue'] = $str;
+								$item_custom['FieldId'] = $id;								
 							break;
-							case 'radio':
-								
+							case 'radio':								
 								$str = rgpost("input_{$id}");								
 								$item_custom['FieldName'] = $field["label"];
-								$item_custom['FieldValue'] = $str;								
+								$item_custom['FieldValue'] = $str;
+								$item_custom['FieldId'] = $id;
 							break;
 							case 'html':
 							case 'section':
 							case 'page':
 							case 'captcha':
 							break;
-							default:
-							
+							default:							
 								$item_custom['FieldName'] = $field["label"];
 								$temp = rgpost("input_{$id}");
 								$val = '';
+								
 								if(is_array($temp)) 
 								{
 									if($field["type"] == 'time')
@@ -282,10 +357,25 @@ class GFCnpFormData {
 								}
 								
 								$item_custom['FieldValue'] = $val;
-															
+								$item_custom['FieldId'] = $id;							
 						}
 						if($item_custom['FieldValue'])
-						$this->customfields[] = $item_custom;																	
+						{
+							if(count($item_custom)) {
+								$hasfield = false;
+								if(count($this->customfields))
+								{
+									foreach($this->customfields as $cfield)
+									{
+										if($cfield['FieldId'] == $item_custom['FieldId'])
+										$hasfield = true;
+									}
+								}
+								if(!$hasfield)
+								$this->customfields[] = $item_custom;
+							}
+						}
+						//$this->customfields[] = $item_custom;																	
 					}
 					break;
 			}
@@ -319,8 +409,7 @@ class GFCnpFormData {
 
 			$qty_field = GFCommon::get_product_fields_by_type($form, array('quantity'), $id);
 			$qty = sizeof($qty_field) > 0 ? rgpost("input_{$qty_field[0]['id']}") : 1;
-
-//echo '<br>';
+			
 			switch ($field["inputType"]) {
 				case 'singleproduct':
 				case 'calculation':
@@ -478,8 +567,20 @@ class GFCnpFormData {
 		//die();
 		if(count($item))
 		$this->productdetails[$id] = $item;
-		if(count($item_custom))
-		$this->customfields[] = $item_custom;
+		if(count($item_custom)) {
+			$hasfield = false;
+			if(count($this->customfields))
+			{
+				foreach($this->customfields as $cfield)
+				{
+					if($cfield['FieldId'] == $item_custom['FieldId'])
+					$hasfield = true;
+				}
+			}
+			if(!$hasfield)
+			$this->customfields[] = $item_custom;
+		}
+		//$this->customfields[] = $item_custom;
 		if(count($item_validate))
 		$this->needtovalidatefields[] = $item_validate;
 		if(count($item_shipping))
