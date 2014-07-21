@@ -149,11 +149,14 @@ class GFCnpData{
     public static function update_feed($id, $form_id, $is_active, $setting){
         global $wpdb;
         $table_name = self::get_cnp_table_name();
-        $setting = maybe_serialize($setting);				$check = self::get_feed_by_form($form_id);
+        $setting = maybe_serialize($setting);				
+		$check = self::get_feed_by_form($form_id);
         if($id == 0 ){
-            if(count($check)) {			//update			$id = $check[0]['id'];            $wpdb->update($table_name, array("form_id" => $form_id, "is_active"=> $is_active, "meta" => $setting), array("id" => $id), array("%d", "%d", "%s"), array("%d"));			} else {			//insert
+            if(count($check) == 0) 
+			{
             $wpdb->insert($table_name, array("form_id" => $form_id, "is_active"=> $is_active, "meta" => $setting), array("%d", "%d", "%s"));
-            $id = $wpdb->get_var("SELECT LAST_INSERT_ID()");			}
+            $id = $wpdb->get_var("SELECT LAST_INSERT_ID()");
+			}
         }
         else{
             //update
