@@ -167,7 +167,7 @@ class GFCnpPayment {
 			$errmsg .= "You should enter Last Name to process your payment.\n";*/
 		if (strlen($formData->lastName) > 50)
 			$errmsg .= "Last Name should not exceed 50 characters length.\n";
-		if (strlen($formData->productdetails) === 0)
+		if (!is_array( $formData->productdetails ) && strlen($formData->productdetails) === 0)
 			$errmsg .= "Cart should have at least one item.\n";
 		
 		
@@ -314,7 +314,7 @@ class GFCnpPayment {
 		$applicationname=$dom->createElement('Name','CnP_PaaS_FM_GravityForm'); 
 		$applicationid=$application->appendChild($applicationname);
 
-		$applicationversion=$dom->createElement('Version','2.000.004.000.20140721');  //2.000.000.000.20130103 Version-Minor change-Bug Fix-Internal Release Number -Release Date
+		$applicationversion=$dom->createElement('Version','2.000.005.000.20140925');  //2.000.000.000.20130103 Version-Minor change-Bug Fix-Internal Release Number -Release Date
 		$applicationversion=$application->appendChild($applicationversion);
 
 		$request = $dom->createElement('Request', '');

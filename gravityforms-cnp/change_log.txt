@@ -1,4 +1,10 @@
 -----------------------------------------------------------------------------
+Version 2.0.5    
+- Fixed warning message when form submit. (Ref:https://forums.clickandpledge.com/showthread.php?t=2070&p=7732)
+- Update the 'js.php' for not to add more than one 'recurring' or 'echeck' fields to the same form.
+- Updated Sep 25, 2014
+
+-----------------------------------------------------------------------------
 Version 2.0.4    
 - Fixed issue while adding a form to C&P gateway.
 - Updated July 21, 2014
