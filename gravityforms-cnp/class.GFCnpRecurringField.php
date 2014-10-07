@@ -23,6 +23,7 @@ class GFCnpRecurringField {
 	* @param GFEwayPlugin $plugin
 	*/
 	public function __construct($plugin) {
+		error_reporting(0);
 		$this->plugin = $plugin;
 		$this->RecurringMethod = array();
 		$this->first_load = true;

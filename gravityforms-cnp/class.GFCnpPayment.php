@@ -284,6 +284,7 @@ class GFCnpPayment {
 	
 	function safeString( $str,  $length=1, $start=0 )
 	{
+		$str = preg_replace('/\x03/', '', $str); //Remove new line characters
 		return substr( htmlspecialchars( ( $str ) ), $start, $length );
 	}
 	
@@ -314,7 +315,7 @@ class GFCnpPayment {
 		$applicationname=$dom->createElement('Name','CnP_PaaS_FM_GravityForm'); 
 		$applicationid=$application->appendChild($applicationname);
 
-		$applicationversion=$dom->createElement('Version','2.000.005.000.20140925');  //2.000.000.000.20130103 Version-Minor change-Bug Fix-Internal Release Number -Release Date
+		$applicationversion=$dom->createElement('Version','2.000.006.000.20141007');  //2.000.000.000.20130103 Version-Minor change-Bug Fix-Internal Release Number -Release Date(yyyymmdd)
 		$applicationversion=$application->appendChild($applicationversion);
 
 		$request = $dom->createElement('Request', '');
