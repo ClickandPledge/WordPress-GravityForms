@@ -402,7 +402,6 @@ class GFCnpFormData {
 		$item_custom = array();
 		$item_validate = array();
 		$item_shipping = array();
-//needtovalidatefields
 
 		if (!RGFormsModel::is_field_hidden($form, $field, array())) {
 			$lead_value = rgpost("input_{$id}");
@@ -497,8 +496,7 @@ class GFCnpFormData {
 					$item_validate['value'] = $price;
 					}
 					break;
-				default:						
-					
+				default:
 					// handle drop-down lists and radio buttons
 					if($field["type"] == 'shipping')
 					{
@@ -508,24 +506,26 @@ class GFCnpFormData {
 					list($name, $price) = rgexplode('|', $lead_value, 2);
 					$item_shipping['ShippingMethod'] = $name;
 					$item_shipping['ShippingValue'] = $price;	
-					}
-					
+					}					
 					elseif (!empty($lead_value)) {
-//echo $lead_value;
 						list($name, $price) = rgexplode('|', $lead_value, 2);
 						$isProduct = true;
 						$item['ItemName'] = $field["label"];
 						$item['ItemID'] = $field["id"];
 						$item['Quantity'] = $qty;
-						$item['UnitPrice'] = $price;						
-						//$item_custom['FieldName'] = $field["label"];
-						//$item_custom['FieldValue'] = $name;
+						$item['UnitPrice'] = $price;
 						$item['productField'] = $field["productField"];
 						$t = $item['productField'];
 						if($t)
 						$item['OptionValue'] = $name;
 						else
 						$item['OptionValue'] = $name;
+						$choices = $field["choices"];
+						foreach($choices as $ch)
+						{
+							if($ch['value'] == $price)
+							$item['OptionLabel'] = $ch['text'];
+						}
 					}
 					
 					break;
