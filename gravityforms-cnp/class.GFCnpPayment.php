@@ -114,11 +114,8 @@ class GFCnpPayment {
 	* process a payment against Click & Pledge; throws exception on error with error described in exception message.
 	*/
 	public function processPayment() {
-		$this->validate($this->Options_new, $this->formData);
-		
+		$this->validate($this->Options_new, $this->formData);		
 		$xml = $this->getPaymentXML($this->Options_new, $this->formData);
-		//echo $xml;
-		//die('CNP Payment');
 		return $this->sendPayment($xml);
 	}
 
@@ -314,7 +311,7 @@ class GFCnpPayment {
 		$applicationname=$dom->createElement('Name','CnP_PaaS_FM_GravityForm'); 
 		$applicationid=$application->appendChild($applicationname);
 
-		$applicationversion=$dom->createElement('Version','2.000.007.000.201411111725');  //2.000.000.000.20130103 Version-Minor change-Bug Fix-Internal Release Number -Release Date
+		$applicationversion=$dom->createElement('Version','2.000.008.000.20141203');  //2.000.000.000.20130103 Version-Minor change-Bug Fix-Internal Release Number -Release Date
 		$applicationversion=$application->appendChild($applicationversion);
 
 		$request = $dom->createElement('Request', '');

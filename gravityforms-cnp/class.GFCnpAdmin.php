@@ -290,9 +290,10 @@ HTML;
 	
 	public static function create_menu($menus){
         // Adding submenu if user has access
-        	$permission = self::has_access("gravityforms_cnp");
+			//$permission = self::has_access("gravityforms_cnp");
+        	$permission = self::has_access("install_plugins");			
         if(!empty($permission)) {
-            $menus[] = array("name" => "gfcnp", "label" => __("Click & Pledge", "gfcnp"), "callback" =>  array("GFCnpAdmin", "cnp_page"), "permission" => $permission);
+			$menus[] = array("name" => "gfcnp", "label" => "Click & Pledge", "callback" => array("GFCnpAdmin", "cnp_page"), "permission" => $permission);
 		}
         return $menus;
     }
@@ -300,7 +301,7 @@ HTML;
 	public static function cnp_page(){
 
         $view = rgget("view");
-
+		
         if($view == "edit")
 
             self::edit_page(rgget("id"));
@@ -571,6 +572,7 @@ HTML;
     }
 	private static function list_page(){
 		
+		
 		if(rgpost('action') == "delete"){
             check_admin_referer("list_action", "gf_cnp_list");
             $id = absint($_POST["action_argument"]);
@@ -667,12 +669,8 @@ HTML;
                     <tbody class="list:user user-list">
 
                         <?php
-
-
-
-
-
-                        $settings = GFCnpData::get_feeds();
+						
+						$settings = GFCnpData::get_feeds();
 
                         if(is_array($settings) && sizeof($settings) > 0){
 
@@ -778,7 +776,7 @@ HTML;
 	protected static function has_access($required_permission){
 
         $has_members_plugin = function_exists('members_get_capabilities');
-
+		//var_dump($required_permission);
         $has_access = $has_members_plugin ? current_user_can($required_permission) : current_user_can("level_7");
 
         if($has_access)

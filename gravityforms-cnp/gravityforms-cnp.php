@@ -3,7 +3,7 @@
 Plugin Name: Gravity Forms Click & Pledge
 Plugin URI: http://clickandpledge.com/Gravity-Forms.html
 Description: Integrates Gravity Forms with Click & Pledge payment gateway, enabling end users to purchase goods and services through Gravity Forms.
-Version: 2.0.7
+Version: 2.0.8
 Author: Click & Pledge
 Author URI: http://manual.clickandpledge.com/Gravity-Forms.html
 */
