@@ -59,11 +59,9 @@ function gfcnp_autoload($class_name) {
 	);
 //echo $class_name.'<br>';
 	if (isset($classMap[$class_name])) {
-	
 		require GFCNP_PLUGIN_ROOT . $classMap[$class_name];
 	}
 }
 spl_autoload_register('gfcnp_autoload');
-
 // instantiate the plug-in
 GFCnpPlugin::getInstance();

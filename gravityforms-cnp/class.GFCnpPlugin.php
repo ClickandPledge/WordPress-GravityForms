@@ -100,7 +100,7 @@ class GFCnpPlugin {
 			add_action('gform_after_submission', array($this, 'gformAfterSubmission'), 10, 2);
 			add_filter('gform_custom_merge_tags', array($this, 'gformCustomMergeTags'), 10, 4);
 			add_filter('gform_replace_merge_tags', array($this, 'gformReplaceMergeTags'), 10, 7);
-						
+			add_filter('gform_enable_entry_info_payment_details', '__return_false'); //For 1.9V later to display payment details in lead details		
 			// hook into Gravity Forms to handle Recurring Payments custom field
 			new GFCnpRecurringField($this);
 			
@@ -145,6 +145,9 @@ class GFCnpPlugin {
 			if($formData->isCcHidden() || $formData->isEcHidden())
 				$hiddenmethod = false;
 			
+			//echo '<pre>';
+			//print_r($formData);
+			//die();
 			// make sure form hasn't already been submitted / processed			
 			if ($this->hasFormBeenProcessed($data['form'])) 
 			{
@@ -162,7 +165,7 @@ class GFCnpPlugin {
 
 			// make that this is the last page of the form and that we have a credit card field and something to bill
 			// and that credit card field is not hidden (which indicates that payment is being made another way)
-			else if (!$hiddenmethod && $formData->isLastPage() && (is_array($formData->ccField) || is_array($formData->ecField))) {
+			else if (!$hiddenmethod && $formData->isLastPage() && ($formData->creditcardCount > 0 || $formData->echeckCount > 0)) {
 				
 				if (!$formData->hasPurchaseFields()) {
 					$data['is_valid'] = false;
@@ -272,9 +275,39 @@ class GFCnpPlugin {
 					// only check credit card details if we've got something to bill
 					//if ($formData->total > 0) 
 					if ( count($formData->productdetails) && $hasproducts ) 
-					{
-						// check for required fields
-						if($formData->creditcardCount != 0) {
+					{						
+							
+							$processtype = 'CareditCard';
+							if($formData->creditcardCount > 0 && $formData->ccName != '' && $formData->ccNumber != '') {
+								$processtype = 'CareditCard';
+							} else if($formData->echeckCount > 0 && $formData->ecRouting != '') {
+								$processtype = 'eCheck';
+							}
+							
+							// check for required fields
+							if($formData->creditcardCount != 0 && $processtype == 'CareditCard') {
+								$expires = DateTime::createFromFormat('my', $formData->ccExpMonth.$formData->ccExpYear);
+							$now     = new DateTime();
+							if ($expires < $now) {
+								$formData->ccField['validation_message'] = 'Credit Card Expired';
+								$formData->ccField['failed_validation'] = true;
+							}
+							if(strlen($formData->ccCVN) > 4) {
+								$formData->ccField['validation_message'] = 'Security Code should contain 3 or 4 digits only';
+								$formData->ccField['failed_validation'] = true;
+							}
+							if($formData->recurringCount) {
+								if($formData->recurring['isRecurring'] == 'yes') {
+									if($formData->recurring['RecurringMethod'] == 'Installment') {
+										if($formData->recurring['Installments'] > 998) {
+											$formData->ccField['validation_message'] = 'Maximum Instalments allowed 998 only';
+											$formData->ccField['failed_validation'] = true;
+										}
+									}
+								}
+							}
+							
+							
 							$required = array(
 								'ccName' => $this->getErrMsg(GFCNP_ERROR_REQ_CARD_HOLDER),
 								'ccNumber' => $this->getErrMsg(GFCNP_ERROR_REQ_CARD_NAME),
@@ -293,7 +326,7 @@ class GFCnpPlugin {
 						foreach ($required as $name => $message) {
 							if (empty($formData->$name)) {
 								$data['is_valid'] = false;
-								if($formData->creditcardCount != 0) {
+								if($formData->creditcardCount != 0 && $processtype == 'CareditCard') {
 									$formData->ccField['failed_validation'] = true;
 									if (!empty($formData->ccField['validation_message']))
 										$formData->ccField['validation_message'] .= '<br />';
@@ -334,7 +367,7 @@ class GFCnpPlugin {
 		
 		$unique_id = RGFormsModel::get_form_unique_id($form['id']);
 
-		$sql = "select lead_id from {$wpdb->prefix}rg_lead_meta where meta_key='gfcnp_unique_id' and meta_value = '\"%s\"'";
+		$sql = "select lead_id from {$wpdb->prefix}rg_lead_meta where meta_key='gfcnp_unique_id' and meta_value = \"%s\"";
 		$lead_id = $wpdb->get_var($wpdb->prepare($sql, $unique_id));
 		return !empty($lead_id);
 	}
@@ -404,13 +437,14 @@ class GFCnpPlugin {
 			}
 
 			$cnp->amount = $formData->total;
+			
 			$response = $cnp->processPayment();
 			
 			$ResultCode = $response->OperationResult->ResultCode;
 			$transation_number = $response->OperationResult->TransactionNumber;
 			$VaultGUID = $response->OperationResult->VaultGUID; 
 			if ($ResultCode == '0') {
-				// transaction was successful, so record transaction number and continue
+				// transaction was successful, so record transaction number and continue								
 				$this->txResult = array (
 					'transaction_id' => $VaultGUID,
 					'payment_status' => 'Approved',
@@ -486,8 +520,8 @@ class GFCnpPlugin {
 			foreach ($this->txResult as $key => $value) {
 				$entry[$key] = $value;
 			}
-			RGFormsModel::update_lead($entry);
-
+			//RGFormsModel::update_lead($entry);
+			GFAPI::update_entry($entry);
 			// record entry's unique ID in database
 			$unique_id = RGFormsModel::get_form_unique_id($form['id']);
 

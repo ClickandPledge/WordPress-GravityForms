@@ -111,7 +111,7 @@ class GFCnpRecurringField {
 					'value' => 'Recurring',
 					'name' => 'RecurringButton',
 					'id' => 'RecurringButton',
-					'onclick' => "StartAddField('" . GFCNP_FIELD_RECURRING . "');",
+					'onclick' => "StartAddField_cnp('" . GFCNP_FIELD_RECURRING . "');",
 				);
 				break;
 			}
@@ -146,8 +146,32 @@ class GFCnpRecurringField {
 			?>
 			<li class="gfcnprecurring_setting field_setting">
 				<div id="RecurringMethod">
+					<label for="gfcnp_recurring_RecurringMethod_label">Labels</label>
+					<div id="label_isthisrecurring">
+						Is this a recurring payment:<input type="text" id="gfcnp_label_isthisrecurring" onchange="GFCnpRecurring.FieldSet(this)"><br>
+					</div>
+					
+					<div id="label_periods">
+						Periodicity&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:<input type="text" id="gfcnp_label_periods" onchange="GFCnpRecurring.FieldSet(this)"><br>
+					</div>
+					
+					<div id="label_periods">
+						# of Installments&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:<input type="text" id="gfcnp_label_installments" onchange="GFCnpRecurring.FieldSet(this)"><br>
+					</div>
+					
+					<div id="label_RecurringMethod">
+						Recurring Type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:<input type="text" id="gfcnp_label_RecurringMethod" onchange="GFCnpRecurring.FieldSet(this)"><br>
+					</div>
+					
+					<div id="label_RecurringMethod">
+						Indefinite Recurring&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:<input type="text" id="gfcnp_label_IndefiniteRecurring" onchange="GFCnpRecurring.FieldSet(this)"><br>
+					</div>
+					
+				</div><br/>
+				
+				<div id="RecurringMethod">
 						<label for="gfcnp_recurring_RecurringMethod_label">
-						Recurring Methods
+						Recurring Types
 						<?php gform_tooltip("gfeway_recurring_RecurringMethod_label") ?>
 						<?php gform_tooltip("gfeway_recurring_RecurringMethod_label_html") ?>
 					</label>
@@ -163,7 +187,7 @@ class GFCnpRecurringField {
 					</div>
 					
 				<label for="gfcnp_recurring_amount_label">
-						Periods
+						Periodicity
 						<?php gform_tooltip("gfeway_recurring_amount_label") ?>
 						<?php gform_tooltip("gfeway_recurring_amount_label_html") ?>
 					</label>
@@ -270,8 +294,7 @@ class GFCnpRecurringField {
 			if (!RGFormsModel::is_field_hidden($form, $field, RGForms::post('gform_field_values')) && (isset($_POST['gfp_'.$field['id']]) && $_POST['gfp_'.$field['id']] == 'on')) {
 				// get the real values
 				$value = self::getPost($field['id']);
-				//print_r($value);
-				//die();
+				
 				if (!is_array($value)) {
 					$validation_result['is_valid'] = false;
 					$validation_result['message'] = __("This field is required.", "gravityforms");
@@ -279,41 +302,53 @@ class GFCnpRecurringField {
 
 				else {
 					$messages = array();
-
-					if ($value['Installments'] === false || $value['Installments'] < 2) {
-						$messages[] = "Please enter a valid value for payments. The value between 2 to 999";
-					}
 					
 					//$options = $this->plugin->options;
 					$options = $field;
-
+					
+					if (empty($value['RecurringMethod'])) {
+						$messages[] = "Please select recurring type.";
+					}
 					if (empty($value['Periodicity'])) {
 						$messages[] = "Please select Periodicity.";
-					}
-
-					if (empty($value['RecurringMethod'])) {
-						$messages[] = "Please select recurring method.";
-					}
+					}				
 					
-					if($value['Installments'] == 1) {
-						$messages[] = "Please enter value greater than 2.";
-					}
-					if ($value['RecurringMethod'] == 'Subscription') {
-						if(!empty($options['gfcnp_maxrecurrings_Subscription'])) {
-							if($value['Installments'] > $options['gfcnp_maxrecurrings_Subscription'])
-							$messages[] = "Please enter value between 2 to ".$options['gfcnp_maxrecurrings_Subscription'].".";	
-						} else {
-						//$messages[] = "Please enter value between 2 to 999.";
+					if($value['indefinite'] == 'no') {
+						if(empty($value['Installments'])) {
+							$messages[] = "Please enter value greater than 2.";
 						}
-					} else {
-						if(!empty($options['gfcnp_maxrecurrings_Installment'])) {
-							if($value['Installments'] > $options['gfcnp_maxrecurrings_Installment'])
-							$messages[] = "Please enter value between 2 to ".$options['gfcnp_maxrecurrings_Installment'].".";	
+						elseif (preg_match('/^\d+\.\d+$/',$value['Installments'])) {
+							$messages[] = "Please enter digits only.";
+						}
+						elseif($value['Installments'] <= 1) {
+							$messages[] = "Please enter value greater than 2.";
+						}
+						elseif ($value['RecurringMethod'] == 'Subscription') {
+							if(!empty($options['gfcnp_maxrecurrings_Subscription'])) {
+								if($value['Installments'] > $options['gfcnp_maxrecurrings_Subscription'])
+								$messages[] = "Please enter value between 2 to ".$options['gfcnp_maxrecurrings_Subscription'].".";	
+							} else {
+								if(empty($value['Installments'])) {
+									$messages[] = "Please enter value between 2 to 999.";
+								} else if($value['Installments'] > 999) {
+									$messages[] = "Please enter value between 2 to 999 for installment.";
+								}						
+							}
 						} else {
-						//$messages[] = "Please enter value between 2 to 999.";
+							if(!empty($options['gfcnp_maxrecurrings_Installment'])) {
+								if($value['Installments'] > $options['gfcnp_maxrecurrings_Installment'])
+								$messages[] = "Please enter value between 2 to ".$options['gfcnp_maxrecurrings_Installment'].".";	
+							} else {
+								if(empty($value['Installments'])) {
+									$messages[] = "Please enter value between 2 to 998.";
+								} else if($value['Installments'] > 998) {
+									$messages[] = "Please enter value between 2 to 998 for instalment.";
+								}
+							}
 						}
 					}
-					
+					//print_r($messages);
+					//die();
 					if (count($messages) > 0) {
 						$validation_result['is_valid'] = false;
 						$validation_result['message'] = implode("<br />\n", $messages);
@@ -387,9 +422,11 @@ class GFCnpRecurringField {
 
 			$input = "<div class='ginput_complex ginput_container gfcnp_recurring_complex $css' id='input_{$field['id']}'>";
 			$isrecurring = empty($isrecurr) ? '' : ' checked';
+			$isthislable = (isset($field['gfcnp_label_isthisrecurring']) && empty($field['gfcnp_label_isthisrecurring'])) ? 'Is this a recurring payment' : $field['gfcnp_label_isthisrecurring'];
+			$isthislable = empty($isthislable) ? 'Is this a recurring payment' : $isthislable;
 			$disabled_text = (IS_ADMIN && RG_CURRENT_VIEW != "entry") ? " disabled='disabled'" : "";
-			$input .= "<input type='checkbox' name='gfp_{$field['id']}' id='gfp_{$field['id']}' class='recurring_checkbox'$isrecurring$disabled_text>&nbsp;&nbsp;Is this a recurring payment <br>";
-			
+			$input .= "<input type='checkbox' name='gfp_{$field['id']}' id='gfp_{$field['id']}' class='recurring_checkbox'$isrecurring$disabled_text>&nbsp;&nbsp;$isthislable <br>";
+			//$input .= print_r($field);
 			// Recurring Method
 			$sub_field = array (
 				'type' => 'Recurring Method',
@@ -402,7 +439,7 @@ class GFCnpRecurringField {
 			$Periods = array();
 			if(isset($field['Installment']) && $field['Installment'] == 1)
 			$Periods['Installment'] = 'Installment';
-			$input .= $this->fieldCheckbox($sub_field, $Periods, $lead_id, $form_id, 'Recurring Method', $isadmin);
+			$input .= $this->fieldCheckbox($sub_field, $Periods, $lead_id, $form_id, 'Recurring Type', $isadmin);
 			
 			$sub_field = array (
 				'type' => 'gfcnp_recurring_maxrecurrings_Installment',
@@ -442,35 +479,33 @@ class GFCnpRecurringField {
 			);
 			$input .= $this->inputText($sub_field, $gfcnp_recurring_maxrecurrings_Subscription, $lead_id, $form_id, 'style="display:none;"', $isadmin);
 			
+			$selval = (isset($_POST['gfcnp_'.$field['id'].'_RecurringMethod'])) ? $_POST['gfcnp_'.$field['id'].'_RecurringMethod'] : '';
+			
 			if(count($this->RecurringMethod) > 1)
 			{
 				$id = $field['id'];
 				$sid = 0;
-				$input  .= "<div class='ginput_container RecurringMethod'>Recurring Method<ul class='gfield_checkbox'>";
-				$input .= "<select name='gfcnp_{$id}_RecurringMethod' class='$v' id='$field_id' >";
+				$RecurringMethod_Label = (isset($field['gfcnp_label_RecurringMethod']) && empty($field['gfcnp_label_RecurringMethod'])) ? 'Recurring Type' : $field['gfcnp_label_RecurringMethod'];
+				$RecurringMethod_Label = empty($RecurringMethod_Label) ? 'Recurring Type' : $RecurringMethod_Label;
+				//print_r($_POST);
+				$input  .= "<div class='ginput_container RecurringMethod'>$RecurringMethod_Label<ul class='gfield_checkbox'>";
+				$input .= "<select name='gfcnp_{$id}_RecurringMethod' class='$v RecurringMethodSelect' id='$field_id' >";
+				//asort($this->RecurringMethod)
 				foreach($this->RecurringMethod as $key => $val) { 
 				$val_key = key($val);
 				$val_value = key($val[key($val)]);
+				if($selval == $val_key.'|'.$val_value) {
+				$input .= "<option value='$val_key|$val_value' selected>$val_value</option>";
+				} else {
 				$input .= "<option value='$val_key|$val_value'>$val_value</option>";
+				}
 				$sid++;
 				}
 				$input .= "</select>";
 				$input .= "</ul></div>";
 			}
 			else if(count($this->RecurringMethod) == 0 && !$isadmin)
-			{
-				$sub_field = array (
-				'type' => 'Recurring Method',
-				'id' => $field['id'],
-				'sub_id' => '5',
-				'label' => 'Recurring Method',
-				'value' => $Period,
-				'label_class' => 'gfcnp_Installment_label',
-				);
-				$Periods = array();				
-				$Periods['Installment'] = 'Installment';
-				$input .= $this->fieldCheckbox($sub_field, $Periods, $lead_id, $form_id, 'Recurring Method', $isadmin);
-				
+			{				
 				$sub_field = array (
 				'type' => 'Recurring Method',
 				'id' => $field['id'],
@@ -483,10 +518,22 @@ class GFCnpRecurringField {
 				$Periods['Subscription'] = 'Subscription';
 				$input .= $this->fieldCheckbox($sub_field, $Periods, $lead_id, $form_id, '', $isadmin);
 				
+				$sub_field = array (
+				'type' => 'Recurring Method',
+				'id' => $field['id'],
+				'sub_id' => '5',
+				'label' => 'Recurring Method',
+				'value' => $Period,
+				'label_class' => 'gfcnp_Installment_label',
+				);
+				$Periods = array();				
+				$Periods['Installment'] = 'Installment';
+				$input .= $this->fieldCheckbox($sub_field, $Periods, $lead_id, $form_id, 'Recurring Type', $isadmin);
+				
 				$id = $field['id'];
 				$sid = 0;
-				$input  .= "<div class='ginput_container RecurringMethod'>Recurring Method<ul class='gfield_checkbox'>";
-				$input .= "<select name='gfcnp_{$id}_RecurringMethod' class='$v' id='$field_id' >";
+				$input  .= "<div class='ginput_container RecurringMethod'>Recurring Type<ul class='gfield_checkbox'>";
+				$input .= "<select name='gfcnp_{$id}_RecurringMethod' class='$v RecurringMethodSelect' id='$field_id' >";
 				foreach($this->RecurringMethod as $key => $val) { 
 				$val_key = key($val);
 				$val_value = key($val[key($val)]);
@@ -502,7 +549,10 @@ class GFCnpRecurringField {
 				$name = key($this->RecurringMethod[0]);
 				$value = key($this->RecurringMethod[0][$name]);
 				//print_r($this->RecurringMethod);
-				$input .= "<input name='gfcnp_{$id}_RecurringMethod' id='$name' type='hidden' value='$name|$value' />";	
+				$input  .= "<div class='ginput_container RecurringMethod'>Recurring Type : ";
+				$input .= "<b>".$value."</b>";
+				$input .= "</div>";
+				$input .= "<input name='gfcnp_{$id}_RecurringMethod' id='$name' type='hidden' value='$name|$value' class='RecurringMethodSelect'/>";	
 			}
 			
 			// Periods
@@ -510,7 +560,7 @@ class GFCnpRecurringField {
 				'type' => 'Periods',
 				'id' => $field['id'],
 				'sub_id' => '4',
-				'label' => 'Periods',
+				'label' => 'Periodicity',
 				'value' => $Period,
 				'label_class' => 'gfcnp_Periods_label',
 			);
@@ -532,13 +582,64 @@ class GFCnpRecurringField {
 			if(isset($field['gfcnp_Year_setting']) && $field['gfcnp_Year_setting'] == 1)
 			$selected_Periods['Year'] = 'Year';
 			//print_r($selected_Periods);
-			$input .= $this->fieldCheckbox($sub_field, $selected_Periods, $lead_id, $form_id, 'Periods', $isadmin);
+			$PeriodsLabel = (isset($field['gfcnp_label_periods']) && empty($field['gfcnp_label_periods'])) ? 'Periodicity' : $field['gfcnp_label_periods'];
+			$PeriodsLabel = empty($PeriodsLabel) ? 'Periodicity' : $PeriodsLabel;
+			
+			$input .= $this->fieldCheckbox($sub_field, $selected_Periods, $lead_id, $form_id, $PeriodsLabel, $isadmin);
 			
 			if($field['indefinite'] == 1) {
 			$gfpindefinite = empty($_POST['gfpindefinite_' . $field['id']]) ? '' : ' checked';
-			$input .= "<span><input type='checkbox' class='indefinite' name='gfpindefinite_{$field['id']}' id='gfpindefinite_{$field['id']}'$disabled_text$gfpindefinite>&nbsp;&nbsp;Indefinite Recurring</span><br>";
+			
+			$IndefiniteRecurring_Lable = (isset($field['gfcnp_label_IndefiniteRecurring']) && empty($field['gfcnp_label_IndefiniteRecurring'])) ? 'Indefinite Recurring' : $field['gfcnp_label_IndefiniteRecurring'];
+			$IndefiniteRecurring_Lable = empty($IndefiniteRecurring_Lable) ? 'Indefinite Recurring' : $IndefiniteRecurring_Lable;
+			
+			$input .= "<span class='indefinitespan'><input type='checkbox' class='indefinite' name='gfpindefinite_{$field['id']}' id='gfpindefinite_{$field['id']}'$disabled_text$gfpindefinite>&nbsp;&nbsp;$IndefiniteRecurring_Lable</span><br>";
 			$input .= "<script type='text/javascript'>
-				
+				manageshowhide();
+				function manageshowhide() {
+					if(jQuery('.RecurringMethodSelect').length > 0) {
+						if(jQuery('.RecurringMethodSelect').val().substr(-11) == 'Installment') {
+							jQuery('.indefinitespan').hide();						
+						} else {
+							jQuery('.indefinitespan').show();
+						}
+					}
+					
+					if(jQuery('.indefinite').length > 0) {
+						if(jQuery('.indefinite').is(':checked')) {
+							jQuery('.gfcnp_recurring_label').val('');
+							jQuery('.gfcnp_recurring_label').hide();
+							jQuery('.gfcnp_recurring_label').prop('readonly', true);
+						}
+						else {						
+							jQuery('.gfcnp_recurring_label').show();
+							jQuery('.gfcnp_recurring_label').prop('readonly', false);
+						}
+					}
+					
+				}
+				jQuery('.RecurringMethodSelect').change(function(){					
+					if(jQuery('.RecurringMethodSelect').val().substr(-11) == 'Installment') {
+						jQuery('.indefinite').prop('checked', false);
+						jQuery('.indefinitespan').hide();						
+					} else {
+						jQuery('.indefinitespan').show();
+					}
+					
+					//alert(jQuery('.indefinite').is(':checked'));
+					if(jQuery('.indefinite').length > 0) {
+						if(jQuery('.indefinite').is(':checked')) {
+							jQuery('.gfcnp_recurring_label').val('');
+							jQuery('.gfcnp_recurring_label').hide();
+							jQuery('.gfcnp_recurring_label').prop('readonly', true);
+						}
+						else {						
+							jQuery('.gfcnp_recurring_label').show();
+							jQuery('.gfcnp_recurring_label').prop('readonly', false);
+						}
+					}
+					
+				});
 				jQuery('.indefinite').click(function(){
 					if(jQuery('.indefinite').is(':checked')) {
 					jQuery('.gfcnp_recurring_label').val('');
@@ -552,13 +653,13 @@ class GFCnpRecurringField {
 				});
 			</script>";
 			}
-			//print_r(get_option(GFCNP_PLUGIN_OPTIONS));
-			// recurring amount
+			
+			$gfcnp_label_installments = (isset($field['gfcnp_label_installments']) && empty($field['gfcnp_label_installments'])) ? '# of Installments' : $field['gfcnp_label_installments'];
 			$sub_field = array (
 				'type' => 'donation',
 				'id' => $field['id'],
 				'sub_id' => '3',
-				'label' => '# of Installments',
+				'label' => $gfcnp_label_installments,
 				'isRequired' => true,
 				'size' => 'medium',
 				'label_class' => 'gfcnp_recurring_label',
@@ -846,17 +947,46 @@ class GFCnpRecurringField {
 					});
 					
 					function togglerecurring()
-					{
+					{						
 						if(jQuery('.recurring_checkbox').is(':checked')) {
 							jQuery('.indefinite').closest('span').show();
 							jQuery('.gfcnp_recurring_label').closest('span').show();
 							jQuery('.gfcnp_Periods_label').closest('div').show();
 							jQuery('.RecurringMethod').show();
+							
+							if(jQuery('.RecurringMethodSelect').length > 0) {
+								if(jQuery('.RecurringMethodSelect').val().substr(-11) == 'Installment') {
+									jQuery('.indefinitespan').hide();
+								} else {
+									if(jQuery('.indefinite').length > 0) {
+										if(jQuery('.indefinite').is(':checked')) {
+											jQuery('.gfcnp_recurring_label').val('');
+											jQuery('.gfcnp_recurring_label').hide();
+											jQuery('.gfcnp_recurring_label').prop('readonly', true);
+										}
+										else {						
+											jQuery('.gfcnp_recurring_label').show();
+											jQuery('.gfcnp_recurring_label').prop('readonly', false);
+										}
+									} else {
+										jQuery('.indefinitespan').show();
+									}
+								}
+							}
+							
 						} else {
 							jQuery('.indefinite').closest('span').hide();
 							jQuery('.gfcnp_recurring_label').closest('span').hide();
 							jQuery('.gfcnp_Periods_label').closest('div').hide();
 							jQuery('.RecurringMethod').hide();
+							
+							if(jQuery('.RecurringMethodSelect').length > 0) {
+								if(jQuery('.RecurringMethodSelect').val().substr(-11) == 'Installment') {
+									jQuery('.indefinitespan').hide();
+								} else {
+									jQuery('.indefinitespan').hide();
+								}
+							}							
 						}
 					}
 				});			
@@ -886,10 +1016,7 @@ class GFCnpRecurringField {
 	* @return array
 	*/
 	public static function getPost($field_id) {
-		$recurring = rgpost('gfcnp_' . $field_id);
-		//echo '<pre>';
-		//print_r($_POST);
-		//die();
+		$recurring = rgpost('gfcnp_' . $field_id);		
 		if (is_array($recurring)) {
 			$Periodicity = explode('|', $recurring[4]);
 			if(count($Periodicity) > 1)
@@ -897,24 +1024,22 @@ class GFCnpRecurringField {
 			else
 			$Periodicity = $recurring[4];
 			
-			list($f, $RecurringMethod) = explode('|', $_POST['gfcnp_'.$field_id.'_RecurringMethod']);
-			/*
-			if(count($RecurringMethod) > 1)
-			$RecurringMethod = $RecurringMethod[1];
-			else
-			$RecurringMethod = $recurring[5];
-			*/
+			list($f, $RecurringMethod) = explode('|', $_POST['gfcnp_'.$field_id.'_RecurringMethod']);			
 			
 			$indefinite = 'no';
-			if(isset($_POST['"gfpindefinite_'.$field_id]) && $_POST['"gfpindefinite_'.$field_id] == 'on') {
-			$Installments = 999;
-			$indefinite = 'yes';
+			//echo $_POST['gfpindefinite_'.$field_id];
+			if(isset($_POST['gfpindefinite_'.$field_id]) && $_POST['gfpindefinite_'.$field_id] == 'on') {
+				if($RecurringMethod == 'Subscription')
+				$Installments = 999;
+				else
+				$Installments = 998;
+				$indefinite = 'yes';
 			}
-			elseif($recurring[3])			
+			elseif(isset($recurring[3]) && $recurring[3])			
 			$Installments = GFCommon::to_number($recurring[3]);
 			else
-			$Installments = 999;
-			
+			$Installments = 0;
+			//echo $indefinite;
 			if(isset($_POST['gfp_'.$field_id]) && $_POST['gfp_'.$field_id] == 'on')
 			$isRecurring = 'yes';
 			else

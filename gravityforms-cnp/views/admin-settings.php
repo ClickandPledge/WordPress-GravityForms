@@ -8,7 +8,7 @@
 	<table class="form-table">
 
 		<tr>
-			<th>Account ID</th>
+			<th>Account ID <span style="color:red;">*</span></th>
 			<td>
 				<input type='text' class="regular-text" name='AccountID' value="<?php echo esc_attr($this->frm->AccountID); ?>" /><br>
 				Get your "Account ID" from Click & Pledge. [Portal > Account Info > API Information].
@@ -16,7 +16,7 @@
 		</tr>
 
 		<tr valign='top'>
-			<th>API Account GUID</th>
+			<th>API Account GUID <span style="color:red;">*</span></th>
 			<td>
 				<input type='text' class="regular-text" name='AccountGuid' value="<?php echo esc_attr($this->frm->AccountGuid); ?>" /><br>
 				Get your "API Account GUID" from Click & Pledge [Portal > Account Info > API Information].
@@ -40,7 +40,7 @@
 		</tr>
 		
 		<tr valign='top' id='OrganizationInformation_tr'>
-			<th>Organization information</th>
+			<th>Receipt Header</th>
 			<td>
 				<textarea name="OrganizationInformation" id="OrganizationInformation" class="regular-text" rows="4" cols="53"><?php echo esc_attr($this->frm->OrganizationInformation); ?></textarea><br>
 Maximum: 1500 characters, the following HTML tags are allowed:
@@ -48,14 +48,14 @@ Maximum: 1500 characters, the following HTML tags are allowed:
 			</td>
 		</tr>
 		
-		<tr valign='top' id='ThankYouMessage_tr'>
+		<!--<tr valign='top' id='ThankYouMessage_tr'>
 			<th>Thank You message</th>
 			<td>
 				<textarea name="ThankYouMessage" id="ThankYouMessage" class="regular-text" rows="4" cols="53"><?php echo esc_attr($this->frm->ThankYouMessage); ?></textarea><br>
 Maximum: 500 characters, the following HTML tags are allowed:
 &lt;P&gt;&lt;/P&gt;&lt;BR /&gt;&lt;OL&gt;&lt;/OL&gt;&lt;LI&gt;&lt;/LI&gt;&lt;UL&gt;&lt;/UL&gt;. You have <span id="ThankYouMessage_countdown">500</span> characters left.				
 			</td>
-		</tr>
+		</tr>-->
 		
 		<tr valign='top' id='TermsCondition_tr'>
 			<th>Terms & Conditions</th>
@@ -150,28 +150,7 @@ To be added at the bottom of the receipt. Typically the text provides proof that
 					}
 				}
 				
-				/*
-				if(jQuery('#email_customer').is(':checked')) {
-					jQuery('#OrganizationInformation_tr').show();
-					jQuery('#ThankYouMessage_tr').show();
-					jQuery('#TermsCondition_tr').show();
-				} else {
-					jQuery('#OrganizationInformation_tr').hide();
-					jQuery('#ThankYouMessage_tr').hide();
-					jQuery('#TermsCondition_tr').hide();
-				}
-				jQuery('#email_customer').click(function(){
-					if(jQuery('#email_customer').is(':checked')) {
-						jQuery('#OrganizationInformation_tr').show();
-						jQuery('#ThankYouMessage_tr').show();
-						jQuery('#TermsCondition_tr').show();
-					} else {
-						jQuery('#OrganizationInformation_tr').hide();
-						jQuery('#ThankYouMessage_tr').hide();
-						jQuery('#TermsCondition_tr').hide();
-					}
-				});
-				*/
+				
 				//OrganizationInformation
 				jQuery('#OrganizationInformation').keydown(function(){
 					limitText(jQuery('#OrganizationInformation'),jQuery('#OrganizationInformation_countdown'),1500);

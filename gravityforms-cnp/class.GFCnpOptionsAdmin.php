@@ -112,13 +112,28 @@ class GFCnpOptionsForm {
 	* @return string
 	*/
 	public function validate() {
+		
 		$errmsg = '';
 		if (strlen($this->AccountID) === 0)
 			$errmsg .= "# Please enter the C&P Account ID.<br/>\n";
 		if (strlen($this->AccountGuid) === 0)
 			$errmsg .= "# Please enter the C&P API Account GUID.<br/>\n";
-
-		return $errmsg;
+		$available_cards = array();
+		if(isset($_POST['Visa']))
+		$available_cards['Visa'] = 'Visa';
+		if(isset($_POST['American_Express']))
+		$available_cards['American_Express'] = 'American Express';
+		if(isset($_POST['Discover']))
+		$available_cards['Discover'] = 'Discover';
+		if(isset($_POST['MasterCard']))
+		$available_cards['MasterCard'] = 'MasterCard';
+		if(isset($_POST['JCB']))
+		$available_cards['JCB'] = 'JCB';
+		if(count($available_cards) == 0) {
+			$errmsg .= "# Please select at least Credit Card.<br/>\n";
+		}
+		if(!empty($errmsg))
+			return '<font color="red">'.$errmsg.'</font>';
 	}
 }
 

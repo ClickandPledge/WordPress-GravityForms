@@ -1,4 +1,12 @@
 -----------------------------------------------------------------------------
+Version 2.100.000.000.20150324    
+- Handled to avoid replace of 'js.php' file. (Ref:https://github.com/ClickandPledge/WordPress-GravityForms/issues/1)
+- Fixed Minor issues
+- Added custom labels for Recurring field (Ref:https://forums.clickandpledge.com/showthread.php?t=2297)
+- Compatible with Gravity Forms 1.9.4.9
+- Updated March 24, 2015
+
+-----------------------------------------------------------------------------
 Version 2.0.8    
 - Fixed Permissions issue.
 - Updated Dec 03, 2014

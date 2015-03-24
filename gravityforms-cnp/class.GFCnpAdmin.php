@@ -193,7 +193,7 @@ class GFCnpAdmin {
 	* @return array
 	*/
 	public function gformCurrencySettingMessage() {
-		echo "<div class='gform_currency_message'>NB: Gravity Forms Click & Pledge only supports 'USD', 'EUR', 'CAD', 'GBP'.</div>\n";
+		echo "<div class='gform_currency_message'>NB: Gravity Forms Click & Pledge only supports 'USD', 'EUR', 'CAD', 'GBP', 'HKD'.</div>\n";
 	}
 
 	/**

@@ -102,7 +102,7 @@ class GFCnpEcheckField {
 					'value' => 'eCheck',
 					'name' => 'EcheckButton',
 					'id' => 'EcheckButton',
-					'onclick' => "StartAddField('" . GFCNP_FIELD_ECHECK . "');",
+					'onclick' => "StartAddField_cnp('" . GFCNP_FIELD_ECHECK . "');",
 				);
 				break;
 			}

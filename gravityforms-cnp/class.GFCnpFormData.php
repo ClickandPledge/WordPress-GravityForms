@@ -258,9 +258,9 @@ class GFCnpFormData {
 					if (is_array($ccExp))
 						list($this->ccExpMonth, $this->ccExpYear) = $ccExp;
 					$this->ccCVN = rgpost("input_{$id}_3");
-					if($this->ccNumber != '' && $this->ccName != '' && $this->ccExpMonth != '' && $this->ccExpYear != '' && $this->ccCVN != '') {
+					//if($this->ccNumber != '' && $this->ccName != '' && $this->ccExpMonth != '' && $this->ccExpYear != '' && $this->ccCVN != '') {
 					$this->creditcardCount++;
-					}
+					//}
 					break;
 					
 				case 'gfcnpecheck':
@@ -274,9 +274,9 @@ class GFCnpFormData {
 					$this->ecName = $echeck['name'];
 					$this->ecChecktype = $echeck['checktype'];
 					$this->ecIdtype = $echeck['idtype'];
-					if($this->ecRouting && $this->ecCheck && $this->ecAccount && $this->ecAccount_type && $this->ecName && $this->ecChecktype && $this->ecIdtype) {
+					//if($this->ecRouting && $this->ecCheck && $this->ecAccount && $this->ecAccount_type && $this->ecName && $this->ecChecktype && $this->ecIdtype) {
 					$this->echeckCount++;
-					}
+					//}
 					break;
 
 				case 'total':
@@ -329,6 +329,9 @@ class GFCnpFormData {
 							case 'section':
 							case 'page':
 							case 'captcha':
+							case 'post_title':
+							case 'post_content':
+							case 'post_image':
 							break;
 							default:							
 								$item_custom['FieldName'] = $field["label"];
@@ -380,11 +383,7 @@ class GFCnpFormData {
 					break;
 			}
 		}
-
-		// TODO: shipping?
-		
-		//print_r($this->options);
-//die('FOrm Data');
+	
 		// if form didn't pass the total, pick it up from calculated amount
 		if ($this->total == 0)
 			$this->total = $this->amount;
@@ -412,23 +411,19 @@ class GFCnpFormData {
 			switch ($field["inputType"]) {
 				case 'singleproduct':
 				case 'calculation':
-					 $price = GFCommon::to_number(rgpost("input_{$id}_2"));
-					 $qty = GFCommon::to_number(rgpost("input_{$id}_3"));
-					 //$item_custom['FieldValue'] = rgpost("input_{$id}");
-					
-					$isProduct = true;
-					if($qty) 
-					{
+					 $pricecalculation = GFCommon::to_number(rgpost("input_{$id}_2"));
+					 $qtycalculation = GFCommon::to_number(rgpost("input_{$id}_3"));
+					if($qtycalculation > 0 && $pricecalculation != '') {
+						$isProduct = true;						
 						$item['ItemName'] = $field["label"];
 						$item['ItemID'] = $field["id"];
-						$item['Quantity'] = $qty;
-						$item['UnitPrice'] = $price;
+						$item['Quantity'] = $qtycalculation;
+						$item['UnitPrice'] = $pricecalculation;
 						$item['productField'] = $field["productField"];
 						$t = $item['productField'];
 						if($t)
-						$item['OptionValue'] = rgpost("input_{$t}");
+						$item['OptionValue'] = rgpost("input_{$t}");						
 					}
-					
 					break;
 				
 				case 'singleshipping':				
@@ -439,45 +434,51 @@ class GFCnpFormData {
 					$item_shipping['ShippingValue'] = $price;						
 					break;
 				case 'hiddenproduct':
-					$price = GFCommon::to_number($field["basePrice"]);
-					$isProduct = true;
-					
-					$item['ItemName'] = $field["label"];
-					$item['ItemID'] = $field["id"];
-					$qty = GFCommon::to_number(rgpost("input_{$id}_3"));
-					$item['Quantity'] = $qty;
-					$item['UnitPrice'] = $price;
-					$item['productField'] = $field["productField"];
-					$t = $item['productField'];
-					if($t)
-					$item['OptionValue'] = rgpost("input_{$t}");
-					
-					if($price) {
-					$item_validate['rule'] = 'price';
-					$item_validate['type'] = 'price';
-					$item_validate['value'] = $price;
+					$pricehiddenproduct = GFCommon::to_number($field["basePrice"]);
+					$qtyhiddenproduct = GFCommon::to_number(rgpost("input_{$id}_3"));
+
+					if($qtyhiddenproduct > 0 && $pricehiddenproduct != '') {
+						$isProduct = true;					
+						$item['ItemName'] = $field["label"];
+						$item['ItemID'] = $field["id"];
+						
+						$item['Quantity'] = $qtyhiddenproduct;
+						$item['UnitPrice'] = $pricehiddenproduct;
+						$item['productField'] = $field["productField"];
+						$t = $item['productField'];
+						if($t)
+						$item['OptionValue'] = rgpost("input_{$t}");
+						
+						if($price) {
+						$item_validate['rule'] = 'price';
+						$item_validate['type'] = 'price';
+						$item_validate['value'] = $price;
+						}
 					}
 					break;
 				case 'donation':
 				case 'price':					
-					$price = GFCommon::to_number($lead_value);
-					$isProduct = true;
-					$item['ItemName'] = $field["label"];
-					$item['ItemID'] = $field["id"];
-					$item['Quantity'] = $qty;
-					$item['UnitPrice'] = $price;
-					$item['productField'] = $field["productField"];
-					$t = $item['productField'];
-					if($t)
-					$item['OptionValue'] = rgpost("input_{$t}");
-					
-					if($price) {
-					$item_validate['rule'] = 'price';
-					$item_validate['type'] = 'price';
-					$item_validate['value'] = $price;
+					$pricedonation = GFCommon::to_number($lead_value);
+					if($qty > 0 && $pricedonation != '') {
+						$isProduct = true;
+						$item['ItemName'] = $field["label"];
+						$item['ItemID'] = $field["id"];
+						$item['Quantity'] = $qty;
+						$item['UnitPrice'] = $pricedonation;
+						$item['productField'] = $field["productField"];
+						$t = $item['productField'];
+						if($t)
+						$item['OptionValue'] = rgpost("input_{$t}");
+						
+						if($pricedonation) {
+						$item_validate['rule'] = 'price';
+						$item_validate['type'] = 'price';
+						$item_validate['value'] = $pricedonation;
+						}
 					}
 					break;
 				case 'number':		//This case will handle the 'Quantity' field					
+					/*
 					$id = $field["productField"];
 					$price = GFCommon::to_number(rgpost("input_{$id}_2"));
 					$isProduct = true;
@@ -495,37 +496,36 @@ class GFCnpFormData {
 					$item_validate['type'] = 'price';
 					$item_validate['value'] = $price;
 					}
+					*/
 					break;
-				default:
+				default:					
 					// handle drop-down lists and radio buttons
 					if($field["type"] == 'shipping')
 					{
 					$this->shippingCount++;
-					$price = GFCommon::to_number($field["basePrice"]);
+					$priceshipping = GFCommon::to_number($field["basePrice"]);
 					$isProduct = true;
-					list($name, $price) = rgexplode('|', $lead_value, 2);
+					list($name, $priceshipping) = rgexplode('|', $lead_value, 2);
 					$item_shipping['ShippingMethod'] = $name;
-					$item_shipping['ShippingValue'] = $price;	
+					$item_shipping['ShippingValue'] = $priceshipping;	
 					}					
 					elseif (!empty($lead_value)) {
-						list($name, $price) = rgexplode('|', $lead_value, 2);
-						$isProduct = true;
-						$item['ItemName'] = $field["label"];
-						$item['ItemID'] = $field["id"];
-						$item['Quantity'] = $qty;
-						$item['UnitPrice'] = $price;
-						$item['productField'] = $field["productField"];
-						$t = $item['productField'];
-						if($t)
-						$item['OptionValue'] = $name;
-						else
-						$item['OptionValue'] = $name;
-						$choices = $field["choices"];
-						foreach($choices as $ch)
-						{
-							if($ch['value'] == $price)
-							$item['OptionLabel'] = $ch['text'];
-						}
+						if($qty > 0) {
+							list($name, $price) = rgexplode('|', $lead_value, 2);
+							$isProduct = true;
+							$item['ItemName'] = $field["label"];
+							$item['ItemID'] = $field["id"];
+							$item['Quantity'] = $qty;
+							$item['UnitPrice'] = $price;
+							$item['productField'] = $field["productField"];
+							$item['OptionValue'] = $name;
+							$choices = $field["choices"];
+							foreach($choices as $ch)
+							{
+								if($ch['value'] == $price)
+								$item['OptionLabel'] = $ch['text'];
+							}
+						}						
 					}
 					
 					break;
@@ -585,7 +585,8 @@ class GFCnpFormData {
 		$this->needtovalidatefields[] = $item_validate;
 		if(count($item_shipping))
 		$this->shippingfields[] = $item_shipping;
-		
+		//echo '<pre>';
+		//print_r($this->productdetails);
 		return $price;
 	}
 

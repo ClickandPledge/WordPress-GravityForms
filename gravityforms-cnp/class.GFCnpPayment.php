@@ -103,7 +103,7 @@ class GFCnpPayment {
 		$this->isLiveSite = $isLiveSite;
 		$this->AccountID = $Options_new['AccountID'];
 		$this->AccountGuid = $Options_new['AccountGuid'];
-		$this->mode = ($Options_new['useTest'] == 'Y') ? 'Test' : 'Production';
+		$this->mode = ($Options_new['useTest'] == 1) ? 'Test' : 'Production';
 		$this->formData = $formData;
 		$this->Options_new = $Options_new;
 		}
@@ -167,23 +167,48 @@ class GFCnpPayment {
 		if (!is_array( $formData->productdetails ) && strlen($formData->productdetails) === 0)
 			$errmsg .= "Cart should have at least one item.\n";
 		
-		
+		if(isset($formData->address) && $formData->address != '') {
+			if( strlen($formData->address_street) < 2 )
+			$errmsg .= "Address should be greater than 2 Characters.\n";
+			if( strlen($formData->address_street) > 100 )
+			$errmsg .= "Address should not be more than 100 Characters.\n";
+			
+			if(!empty($formData->address_suburb)) {
+				if( strlen($formData->address_suburb) < 2 )
+				$errmsg .= "City should be greater than 2 Characters.\n";
+				if( strlen($formData->address_suburb) > 50 )
+				$errmsg .= "City should not be more than 50 Characters.\n";
+			}
+			
+			if(!empty($formData->address_state)) {
+				if( strlen($formData->address_state) > 50 )
+				$errmsg .= "State should not be more than 50 Characters.\n";
+			}
+			
+			if(!empty($formData->postcode)) {
+				if( strlen($formData->postcode) < 2 )
+				$errmsg .= "Postal Code should be greater than 2 Characters.\n";
+				if( strlen($formData->postcode) > 50 )
+				$errmsg .= "Postal Code should not be more than 50 Characters.\n";
+			}
+		}		
 		if(isset($formData->shippingfields) && count($formData->shippingfields)) {
-			if( $orderplaced->address_street != '' )
+			if( $formData->address_street_shipping == '' )
 			$errmsg .= "Please enter shipping address.\n";
-			if( $orderplaced->address_suburb != '' )
+			if( $formData->address_suburb_shipping == '' )
 			$errmsg .= "Please enter shipping city.\n";
-			if( $orderplaced->address_state != '' )
+			if( $formData->address_state_shipping == '' )
 			$errmsg .= "Please enter shipping state.\n";
-			if( $orderplaced->postcode != '' )
+			if( $formData->postcode_shipping == '' )
 			$errmsg .= "Please enter shipping postal code.\n";
-			if( $orderplaced->address_country != '' )
-			$errmsg .= "Please seelct country.\n";
+			if( $formData->address_country_shipping == '' )
+			$errmsg .= "Please select shipping country.\n";
 		}
+		
 		if(count($formData->needtovalidatefields)) {
 			for($r = 0; $r < count($formData->needtovalidatefields); $r++)
 			{
-				if($formData->needtovalidatefields[$r]['type'] == 'price' && !preg_match('/^\d+(?:\.\d{2})?$/', $formData->needtovalidatefields[$r]['value']))
+				if($formData->needtovalidatefields[$r]['type'] == 'price' && !is_numeric($formData->needtovalidatefields[$r]['value']))
 				{
 					$errmsg .= "Invalid price.\n";
 				}
@@ -197,7 +222,14 @@ class GFCnpPayment {
 		if((isset($formData->recurring)) && ($formData->recurring['isRecurring'] == 'yes') && $this->amount == 0) {
 			$errmsg .= "amount must be greater than zero for recurring transaction.\n";
 		}
-		if($formData->creditcardCount != 0) {
+		$processtype = 'CareditCard';
+		if($formData->creditcardCount > 0 && $this->cardHoldersName != '' && $this->cardNumber != '') {
+			$processtype = 'CareditCard';
+		} else if($formData->echeckCount > 0 && $formData->ecRouting != '') {
+			$processtype = 'eCheck';
+		}
+		
+		if($formData->creditcardCount != 0 && $processtype == 'CareditCard') {
 			if (strlen($this->cardHoldersName) === 0)
 				$errmsg .= "card holder's name cannot be empty.\n";
 			if (strlen($this->cardNumber) === 0)
@@ -237,16 +269,19 @@ class GFCnpPayment {
 						$errmsg .= "card expiry year can't be in the past.\n";
 				}
 			}
-
+			
 			if (!is_numeric($formData->ccCVN)) {
-			$errmsg .= "Security Code should be digits only.\n";
+				$errmsg .= "Security Code should be digits only.\n";
+			}
+			if (preg_match('/^\d+\.\d+$/',$formData->ccCVN)) {
+				$errmsg .= "Security Code should be digits only.\n";
 			}
 			if (strlen($formData->ccCVN) > 4)
 				$errmsg .= "CVV should be 3 or 4 digits only.\n";
 			if (strlen($formData->ccName) == 1)
-				$errmsg .= "Cardholder Name should be 2 to 50 characters length.\n";
+				$errmsg .= "Card holder Name should be 2 to 50 characters length.\n";
 			if (strlen($formData->ccName) > 50)
-				$errmsg .= "Cardholder Name should not exceed 50 characters length.\n";
+				$errmsg .= "Card holder Name should not exceed 50 characters length.\n";
 		} else {
 			if (strlen($formData->ecRouting) > 9)
 				$errmsg .= "Routing Number should be max 9 digits only.\n";
@@ -290,7 +325,10 @@ class GFCnpPayment {
 	* @return string
 	*/
 	public function getPaymentXML($configValues, $orderplaced) 
-	{	
+	{
+		//echo '<pre>';
+		//print_r($configValues);
+		//die();
 		$dom = new DOMDocument('1.0', 'UTF-8');
 		$root = $dom->createElement('CnPAPI', '');
 		$root->setAttribute("xmlns","urn:APISchema.xsd");
@@ -311,7 +349,7 @@ class GFCnpPayment {
 		$applicationname=$dom->createElement('Name','CnP_PaaS_FM_GravityForm'); 
 		$applicationid=$application->appendChild($applicationname);
 
-		$applicationversion=$dom->createElement('Version','2.000.008.000.20141203');  //2.000.000.000.20130103 Version-Minor change-Bug Fix-Internal Release Number -Release Date
+		$applicationversion=$dom->createElement('Version','2.100.000.000.20150324');  //2.000.000.000.20130103 Version-Minor change-Bug Fix-Internal Release Number -Release Date
 		$applicationversion=$application->appendChild($applicationversion);
 
 		$request = $dom->createElement('Request', '');
@@ -408,7 +446,7 @@ class GFCnpPayment {
 		}
 
 		if(!empty($orderplaced->address_country)) {
-		$countries = simplexml_load_file( WP_PLUGIN_URL.DIRECTORY_SEPARATOR.plugin_basename( dirname(__FILE__)).DIRECTORY_SEPARATOR.'Countries.xml' );
+		$countries = simplexml_load_file( plugin_dir_path( __FILE__ ).'Countries.xml' );
 		$billing_country_id = '';
 		foreach( $countries as $country ){
 			if( $country->attributes()->Name == $orderplaced->address_country ){
@@ -485,7 +523,8 @@ class GFCnpPayment {
 			
 			if( $orderplaced->address_country_shipping != '' )
 			{
-				$countries = simplexml_load_file( WP_PLUGIN_URL.DIRECTORY_SEPARATOR.plugin_basename( dirname(__FILE__)).DIRECTORY_SEPARATOR.'Countries.xml' );
+				$countries = simplexml_load_file( plugin_dir_path( __FILE__ ).'Countries.xml' );
+				
 				
 				$shipping_country_id = '';
 				foreach( $countries as $country ){
@@ -500,7 +539,7 @@ class GFCnpPayment {
 			}
 			else
 			{
-				$countries = simplexml_load_file( WP_PLUGIN_URL.DIRECTORY_SEPARATOR.plugin_basename( dirname(__FILE__)).DIRECTORY_SEPARATOR.'Countries.xml' );
+				$countries = simplexml_load_file( plugin_dir_path( __FILE__ ).'Countries.xml' );
 				
 				$shipping_country_id = '';
 				foreach( $countries as $country ){
@@ -513,7 +552,9 @@ class GFCnpPayment {
 				$ship_country=$shippingaddress->appendChild($ship_country);
 				}
 			}
+			
 		}
+		
 		if(isset($orderplaced->customfields) && count($orderplaced->customfields))
 		{
 			$customfieldlist = $dom->createElement('CustomFieldList','');
@@ -537,9 +578,16 @@ class GFCnpPayment {
 			$cardholder->removeChild($customfieldlist);
 		}
 		
+		
+		$processtype = 'CareditCard';
+		if($orderplaced->creditcardCount > 0 && $orderplaced->ccName != '' && $orderplaced->ccNumber != '') {
+			$processtype = 'CareditCard';
+		} else if($orderplaced->echeckCount > 0 && $orderplaced->ecRouting != '') {
+			$processtype = 'eCheck';
+		}
 		$paymentmethod=$dom->createElement('PaymentMethod','');
 		$paymentmethod=$cardholder->appendChild($paymentmethod);
-		if($orderplaced->creditcardCount != 0) 
+		if($orderplaced->creditcardCount != 0 && $processtype == 'CareditCard') 
 		{
 			$payment_type=$dom->createElement('PaymentType','CreditCard');
 			$payment_type=$paymentmethod->appendChild($payment_type);
@@ -599,7 +647,9 @@ class GFCnpPayment {
 		}
 		
 		$total_calculate = 0;
-		
+		//echo '<pre>';
+		//print_r($orderplaced);
+		//die();
 		//Products processing
 		if(isset($orderplaced->productdetails) && count($orderplaced->productdetails))
 		{
@@ -608,111 +658,94 @@ class GFCnpPayment {
 			$OptionLabel = '';			
 			$p = 0;	
 			foreach ( $orderplaced->productdetails as  $pr) 
-			{
-				//if($pr['productField'] == '' ) 
-				{
-					$OptionValue = '';
-					$orderitem=$dom->createElement('OrderItem','');
-					$orderitem=$orderitemlist->appendChild($orderitem);
+			{				
+				$OptionValue = '';
+				$orderitem=$dom->createElement('OrderItem','');
+				$orderitem=$orderitemlist->appendChild($orderitem);
 
-					$itemid=$dom->createElement('ItemID',($p+1));
-					$itemid=$orderitem->appendChild($itemid);				
-					$tempName = $pr['ItemName'];
-					$tempName2 = '';
-					$cost = $pr['UnitPrice'];
-					foreach($orderplaced->productdetails as $sub)
-					{
-						if($sub['productField'] == $pr['ItemID']) {
-							$tempName2 .= $sub['ItemName'];
-							if($sub['OptionValue']) {
-							$tempName2 .= ':'.$sub['OptionValue'];
-							$OptionValue = $sub['OptionValue'];
-							}
-							if(isset($sub['OptionLabel']))
-							$OptionLabel = $sub['OptionLabel'];
-							
-							$cost += $sub['UnitPrice'];
-						} elseif($sub['OptionValue'] != '' && $pr['ItemID'] == $sub['ItemID']) {
-							$OptionValue = $sub['OptionValue'];
-							$tempName2 .= $sub['OptionValue'];
-							
-							if(isset($sub['OptionLabel']))
-							$OptionLabel = $sub['OptionLabel'];
-						}
+				$itemid=$dom->createElement('ItemID',($p+1));
+				$itemid=$orderitem->appendChild($itemid);				
+				$tempName = $pr['ItemName'];
+				$tempName2 = (isset($pr['OptionValue']) && $pr['OptionValue'] != '') ? $pr['OptionValue'] : '';
+				$cost = $pr['UnitPrice'];
+				$tempName = ($tempName2) ? $tempName . ' ('.$tempName2.')' : $tempName;
+				$OptionLabel = $pr['OptionValue'];
+				$itemname=$dom->createElement('ItemName',$this->safeString(trim($tempName), 50));
+				$itemname=$orderitem->appendChild($itemname);
+
+				$quntity=$dom->createElement('Quantity',$pr['Quantity']);
+				$quntity=$orderitem->appendChild($quntity);
+				//print_r($pr);
+				//echo ($cost/$orderplaced->recurring['Installments'])*$pr['Quantity'];
+				//die('hhhhhhhhhhhhhh');
+				if((isset($orderplaced->recurring)) && ($orderplaced->recurring['isRecurring'] == 'yes')) {
+					if($orderplaced->recurring['indefinite'] == 'yes') {
+						$Installments = ($orderplaced->recurring['RecurringMethod'] == 'Installment') ? 998 : 999;
+					} elseif($orderplaced->recurring['Installments']) {
+						$Installments = $orderplaced->recurring['Installments'];
+					}
+					else {
+						$Installments = 999;
 					}
 					
-					$tempName = ($tempName2) ? $tempName . ' ('.$tempName2.')' : $tempName;
-					$itemname=$dom->createElement('ItemName',$this->safeString(trim($tempName), 50));
-					$itemname=$orderitem->appendChild($itemname);
-
-					$quntity=$dom->createElement('Quantity',$pr['Quantity']);
-					$quntity=$orderitem->appendChild($quntity);
-
-					if((isset($orderplaced->recurring)) && ($orderplaced->recurring['isRecurring'] == 'yes')) {
-						if($orderplaced->recurring['indefinite'] == 'yes') {
-							$Installments = 999;
-						} elseif($orderplaced->recurring['Installments']) {
-							$Installments = $orderplaced->recurring['Installments'];
-						}
-						else {
-							$Installments = 999;
-						}
-						
-						if($orderplaced->recurring['RecurringMethod'] == 'Installment') {
-						$total_calculate += number_format(($cost/$Installments),2,'.','')*$pr['Quantity'];
-						$unitprice=$dom->createElement('UnitPrice',(number_format(($cost/$Installments),2,'.','')*100));
-						$unitprice=$orderitem->appendChild($unitprice);
-						} else {
-						$total_calculate += $cost*$pr['Quantity'];
-						$unitprice=$dom->createElement('UnitPrice',($cost*100));
-						$unitprice=$orderitem->appendChild($unitprice);
-						}
+					if($orderplaced->recurring['RecurringMethod'] == 'Installment') {						
+					$total_calculate += $this->number_format(($cost/$Installments),2,'.','')*$pr['Quantity'];
+					$unitprice=$dom->createElement('UnitPrice',($this->number_format(($cost/$Installments),2,'.','')*100));
+					$unitprice=$orderitem->appendChild($unitprice);
 					} else {
 					$total_calculate += $cost*$pr['Quantity'];
 					$unitprice=$dom->createElement('UnitPrice',($cost*100));
 					$unitprice=$orderitem->appendChild($unitprice);
 					}
-					
-					//SKU Handling
-					foreach($orderplaced->customfields as $sub)
-					{
-						if((substr($sub['FieldName'], 0, 5) == '{SKU}') && $sub['FieldValue'] != '') {
-							$parts = explode('}{OPTION=', $sub['FieldName']);
-							//Format:{SKU}{FIELDID=11}{OPTION=N}
-							//print_r($parts);
+				} else {
+				$total_calculate += $cost*$pr['Quantity'];
+				$unitprice=$dom->createElement('UnitPrice',($cost*100));
+				$unitprice=$orderitem->appendChild($unitprice);
+				}
+				
+				//SKU Handling
+				foreach($orderplaced->customfields as $sub)
+				{
+					//print_r($sub);
+					if((substr($sub['FieldName'], 0, 5) == '{SKU}') && $sub['FieldValue'] != '') {
+						$parts = explode('}{OPTION=', $sub['FieldName']);
+						//print_r($parts);
+						if(count($parts) > 1) //TO handle if product has options
+						{
+						$id = $parts[0];
+						$id = substr($id, 14);
+						$val = substr($parts[1], 0, -1);
+						}
+						else
+						{
+						$id = substr($parts[0], 14);
+						$id = substr($id, 0, -1);
+						$val = '';
+						}
+						//echo $id;
+						//die();
+						if($id == $pr['ItemID'] && $OptionLabel == substr($parts[1],0,-1)) 
+						{
+							
 							if(count($parts) > 1) //TO handle if product has options
 							{
-							$id = $parts[0];
-							$id = substr($id, 14);
-							$val = substr($parts[1], 0, -1);
-							}
-							else
-							{
-							$id = substr($parts[0], 14);
-							$id = substr($id, 0, -1);
-							$val = '';
-							}
-
-							if($id == $pr['ItemID'] && $OptionLabel == substr($parts[1],0,-1)) 
-							{
-								
-								if(count($parts) > 1) //TO handle if product has options
+								if($OptionLabel != '' && $val != '' && $OptionLabel == substr($parts[1],0,-1))
 								{
-									if($OptionLabel != '' && $val != '' && $OptionLabel == substr($parts[1],0,-1))
-									{
-										$sku_code=$dom->createElement('SKU',$this->safeString($sub['FieldValue'], 100));
-										$sku_code=$orderitem->appendChild($sku_code);
-									}
-								} else {
-								$sku_code=$dom->createElement('SKU',$this->safeString($sub['FieldValue'], 100));
-								$sku_code=$orderitem->appendChild($sku_code);
+									$sku_code=$dom->createElement('SKU',$this->safeString($sub['FieldValue'], 100));
+									$sku_code=$orderitem->appendChild($sku_code);
 								}
+							} else {
+							$sku_code=$dom->createElement('SKU',$this->safeString($sub['FieldValue'], 100));
+							$sku_code=$orderitem->appendChild($sku_code);
 							}
-							
 						}
+						elseif($id == $pr['ItemID'] && $val == '') {
+						
+						}
+						
 					}
-					
 				}
+				//die();
 			}
 			
 		}
@@ -744,8 +777,8 @@ class GFCnpPayment {
 					$ShippingValue_Local = $ShippingValue_Local;
 					}
 				}
-				$ShippingValue += number_format($ShippingValue_Local, 2, '.', '');
-				$shipping_value = $dom->createElement('ShippingValue', number_format($ShippingValue_Local, 2, '.', '')*100);
+				$ShippingValue += $this->number_format($ShippingValue_Local, 2, '.', '');
+				$shipping_value = $dom->createElement('ShippingValue', $this->number_format($ShippingValue_Local, 2, '.', '')*100);
 				$shipping_value=$shipping->appendChild($shipping_value);				
 			}
 		}
@@ -760,12 +793,6 @@ class GFCnpPayment {
 		{
 			$recipt_org=$dom->createElement('OrganizationInformation',$this->safeString($configValues['OrganizationInformation'], 1500));
 			$recipt_org=$receipt->appendChild($recipt_org);
-		}
-		
-		if( $configValues['ThankYouMessage'] != '')
-		{
-			$recipt_thanks=$dom->createElement('ThankYouMessage',$this->safeString($configValues['ThankYouMessage'], 500));
-			$recipt_thanks=$receipt->appendChild($recipt_thanks);
 		}
 		
 		if( $configValues['TermsCondition'] != '')
@@ -854,7 +881,7 @@ class GFCnpPayment {
 			else {
 				$Installments = 999;
 			}
-			//$Total = number_format($orderplaced->total/$Installments, 2, '.', '');
+			//$Total = $this->number_format($orderplaced->total/$Installments, 2, '.', '');
 			$Total = $total_calculate;
 		} else {
 			$Total = $total_calculate;
@@ -865,9 +892,19 @@ class GFCnpPayment {
 		$total_amount=$dom->createElement('Total',($GrandTotal*100));
 		$total_amount=$trans_totals->appendChild($total_amount);
 		
-		$strParam =$dom->saveXML();
-
+		$strParam =$dom->saveXML();		
+		//echo $strParam;
+		//die('Iam in class.GFCnpPayment.php');
 		return $strParam;
+	}
+	
+	public function number_format($number, $decimals = 2,$decsep = '', $ths_sep = '') {
+		$parts = explode('.', $number);
+		if(count($parts) > 1) {
+			return $parts[0].'.'.substr($parts[1],0,$decimals);
+		} else {
+			return $number;
+		}
 	}
 
 	/**
