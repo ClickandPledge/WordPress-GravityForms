@@ -1,4 +1,7 @@
 -----------------------------------------------------------------------------
+Version 2.100.001.000.20150420
+- Fixed shipping method issue 
+
 Version 2.100.000.000.20150324    
 - Handled to avoid replace of 'js.php' file. (Ref:https://github.com/ClickandPledge/WordPress-GravityForms/issues/1)
 - Fixed Minor issues

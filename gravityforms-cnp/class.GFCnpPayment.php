@@ -349,7 +349,7 @@ class GFCnpPayment {
 		$applicationname=$dom->createElement('Name','CnP_PaaS_FM_GravityForm'); 
 		$applicationid=$application->appendChild($applicationname);
 
-		$applicationversion=$dom->createElement('Version','2.100.000.000.20150324');  //2.000.000.000.20130103 Version-Minor change-Bug Fix-Internal Release Number -Release Date
+		$applicationversion=$dom->createElement('Version','2.100.001.000.20150420');  //2.000.000.000.20130103 Version-Minor change-Bug Fix-Internal Release Number -Release Date
 		$applicationversion=$application->appendChild($applicationversion);
 
 		$request = $dom->createElement('Request', '');
@@ -759,7 +759,7 @@ class GFCnpPayment {
 			foreach ( $orderplaced->shippingfields as  $sp) 
 			{
 				$ShippingValue_Local = 0;
-				$shipping_method=$dom->createElement('ShippingMethod',$sp['ShippingMethod']);
+				$shipping_method=$dom->createElement('ShippingMethod',$this->safeString($sp['ShippingMethod'],50));
 				$shipping_method=$shipping->appendChild($shipping_method);
 				$ShippingValue_Local = $sp['ShippingValue'];
 				if((isset($orderplaced->recurring)) && ($orderplaced->recurring['isRecurring'] == 'yes')) {
