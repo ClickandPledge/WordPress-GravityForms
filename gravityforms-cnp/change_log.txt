@@ -1,7 +1,13 @@
 -----------------------------------------------------------------------------
+Version 2.100.002.000.20150505
+- Fixed SKU issue (don’t allow & sign in the SKU)
+- Fixed First Name issue (Ref:https://forums.clickandpledge.com/showthread.php?t=2542)
+
+-----------------------------------------------------------------------------
 Version 2.100.001.000.20150420
 - Fixed shipping method issue 
 
+-----------------------------------------------------------------------------
 Version 2.100.000.000.20150324    
 - Handled to avoid replace of 'js.php' file. (Ref:https://github.com/ClickandPledge/WordPress-GravityForms/issues/1)
 - Fixed Minor issues

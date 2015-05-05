@@ -140,6 +140,7 @@ class GFCnpPayment {
 			$errmsg .= "GUID cannot be empty. Please contact administrator\n";
 			$adminerrors = true;
 		}
+		/*
 		if($formData->creditcardCount != 0) {
 			if ($formData->firstName == '' || $formData->lastName == '') {
 				if($formData->firstName == '')
@@ -149,6 +150,34 @@ class GFCnpPayment {
 				$adminerrors = true;
 			}
 		}
+		*/
+		
+		if($formData->creditcardCount != 0) {
+			$firstName = $lastName = $mess = '';
+			if ($formData->firstName == '' && $formData->lastName == '') {
+				if($formData->ccName != '') {
+					$parts = explode(' ', $formData->ccName);
+					if(count($parts) > 1) {
+						$firstName = $parts[0];
+						$lastName = $parts[1];
+					} else {
+						$firstName = $parts[0];
+					}
+				}
+				$mess = 'Name of card should be in the form of Fist Name Last Name';				
+			} else {
+				$firstName = $formData->firstName;
+				$lastName =  $formData->lastName;
+				if($firstName == '')
+				$mess = "Please enter First Name.\n";
+				if($lastName == '')
+				$mess = "Please enter Last Name.\n";
+			}
+			if($firstName == '' || $lastName == '') {
+				$adminerrors = true;
+				$errmsg .= $mess;
+			}			
+		}
 		
 		if(isset($formData->shippingfields) && count($formData->shippingfields) && $formData->address_street == '') {
 			$errmsg .= "Form contains shipping fields but do not have shipping address. Please contact administrator.\n";
@@ -156,10 +185,11 @@ class GFCnpPayment {
 		}
 		
 		if(!$adminerrors) {
+		/*
 		if ($formData->firstName == '')
-			$errmsg .= "You should enter First Name to process your payment.\n";
+			$errmsg .= "You should enter First Name to process your payment.\n";*/
 		if (strlen($formData->firstName) > 50)
-			$errmsg .= "First Name should not exceed 50 characters length.\n";
+			$errmsg .= "First Name should not exceed 50 characters length.\n";		
 		/*if ($formData->lastName == '')
 			$errmsg .= "You should enter Last Name to process your payment.\n";*/
 		if (strlen($formData->lastName) > 50)
@@ -391,14 +421,34 @@ class GFCnpPayment {
 		$billinginfo=$dom->createElement('BillingInformation','');
 		$billinginfo=$cardholder->appendChild($billinginfo);
 		
-		if($orderplaced->firstName) {
+		if($orderplaced->firstName != '') {
 		$billfirst_name=$dom->createElement('BillingFirstName',$this->safeString($orderplaced->firstName,50));
 		$billfirst_name=$billinginfo->appendChild($billfirst_name);
+		} else {
+			$parts = explode(' ',$orderplaced->ccName);
+			if(count($parts) > 1) {
+				$BillingFirstName = $parts[0];
+			} else {
+				$BillingFirstName = $orderplaced->ccName;
+			}
+			$billfirst_name=$dom->createElement('BillingFirstName',$this->safeString($BillingFirstName,50));
+			$billfirst_name=$billinginfo->appendChild($billfirst_name);
 		}
 		
-		if($orderplaced->lastName) {		
-		$billlast_name=$dom->createElement('BillingLastName',$this->safeString($orderplaced->lastName,50));
-		$billlast_name=$billinginfo->appendChild($billlast_name);
+		if($orderplaced->lastName != '') {		
+			$billlast_name=$dom->createElement('BillingLastName',$this->safeString($orderplaced->lastName,50));
+			$billlast_name=$billinginfo->appendChild($billlast_name);
+		} else {
+			$parts = explode(' ',$orderplaced->ccName);
+			if(count($parts) > 1) {
+				$BillingLastName = $parts[1];
+			} else {
+				$BillingLastName = '';
+			}
+			if($BillingLastName != '') {
+			$billlast_name=$dom->createElement('BillingLastName',$this->safeString($BillingLastName,50));
+			$billlast_name=$billinginfo->appendChild($billlast_name);
+			}
 		}
 
 		if (isset($orderplaced->email) && $orderplaced->email != '')
