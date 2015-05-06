@@ -340,7 +340,8 @@ class GFCnpPayment {
 			 $ipaddress = $_SERVER['HTTP_FORWARDED'];
 		 else
 			 $ipaddress = $_SERVER['REMOTE_ADDR'];
-
+		$parts = explode(',', $ipaddress);
+        if(count($parts) > 1) $ipaddress = $parts[0];
 		 return $ipaddress; 
 	}
 	
@@ -379,7 +380,7 @@ class GFCnpPayment {
 		$applicationname=$dom->createElement('Name','CnP_PaaS_FM_GravityForm'); 
 		$applicationid=$application->appendChild($applicationname);
 
-		$applicationversion=$dom->createElement('Version','2.100.001.000.20150420');  //2.000.000.000.20130103 Version-Minor change-Bug Fix-Internal Release Number -Release Date
+		$applicationversion=$dom->createElement('Version','2.100.003.000.201500506');  //2.000.000.000.20130103 Version-Minor change-Bug Fix-Internal Release Number -Release Date
 		$applicationversion=$application->appendChild($applicationversion);
 
 		$request = $dom->createElement('Request', '');

@@ -1,4 +1,8 @@
 -----------------------------------------------------------------------------
+Version 2.100.003.000.20150506
+- Fixed Ip address issue
+
+-----------------------------------------------------------------------------
 Version 2.100.002.000.20150505
 - Fixed SKU issue (don’t allow & sign in the SKU)
 - Fixed First Name issue (Ref:https://forums.clickandpledge.com/showthread.php?t=2542)
