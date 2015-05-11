@@ -1,4 +1,9 @@
 -----------------------------------------------------------------------------
+Version 2.100.004.000.20150511
+- Fixed SOAP Client issue (Ref:https://forums.clickandpledge.com/showthread.php?t=2545&p=9533#post9533)
+- Simple load XML issue
+
+-----------------------------------------------------------------------------
 Version 2.100.003.000.20150506
 - Fixed Ip address issue
 

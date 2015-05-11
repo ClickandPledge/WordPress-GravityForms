@@ -380,7 +380,7 @@ class GFCnpPayment {
 		$applicationname=$dom->createElement('Name','CnP_PaaS_FM_GravityForm'); 
 		$applicationid=$application->appendChild($applicationname);
 
-		$applicationversion=$dom->createElement('Version','2.100.003.000.201500506');  //2.000.000.000.20130103 Version-Minor change-Bug Fix-Internal Release Number -Release Date
+		$applicationversion=$dom->createElement('Version','2.100.004.000.20150511');  //2.000.000.000.20130103 Version-Minor change-Bug Fix-Internal Release Number -Release Date
 		$applicationversion=$application->appendChild($applicationversion);
 
 		$request = $dom->createElement('Request', '');
@@ -499,12 +499,14 @@ class GFCnpPayment {
 		}
 
 		if(!empty($orderplaced->address_country)) {
-		$countries = simplexml_load_file( plugin_dir_path( __FILE__ ).'Countries.xml' );
 		$billing_country_id = '';
-		foreach( $countries as $country ){
-			if( $country->attributes()->Name == $orderplaced->address_country ){
-				$billing_country_id = $country->attributes()->Code;
-			} 
+		if(ini_get('allow_url_fopen')) {//To check if fopen is "ON"
+			$countries = simplexml_load_file( plugin_dir_path( __FILE__ ).'Countries.xml' );		
+			foreach( $countries as $country ){
+				if( $country->attributes()->Name == $orderplaced->address_country ){
+					$billing_country_id = $country->attributes()->Code;
+				} 
+			}
 		}
 		if($billing_country_id) {
 		$billing_country=$dom->createElement('BillingCountryCode',str_pad($billing_country_id, 3, "0", STR_PAD_LEFT));
@@ -576,14 +578,14 @@ class GFCnpPayment {
 			
 			if( $orderplaced->address_country_shipping != '' )
 			{
-				$countries = simplexml_load_file( plugin_dir_path( __FILE__ ).'Countries.xml' );
-				
-				
 				$shipping_country_id = '';
-				foreach( $countries as $country ){
-					if( $country->attributes()->Name == $orderplaced->address_country_shipping ){
-						$shipping_country_id = $country->attributes()->Code;
-					} 
+				if(ini_get('allow_url_fopen')) {//To check if fopen is "ON"
+					$countries = simplexml_load_file( plugin_dir_path( __FILE__ ).'Countries.xml' );
+					foreach( $countries as $country ){
+						if( $country->attributes()->Name == $orderplaced->address_country_shipping ){
+							$shipping_country_id = $country->attributes()->Code;
+						} 
+					}
 				}
 				if($shipping_country_id) {
 				$ship_country=$dom->createElement('ShippingCountryCode',$shipping_country_id);
@@ -592,13 +594,14 @@ class GFCnpPayment {
 			}
 			else
 			{
-				$countries = simplexml_load_file( plugin_dir_path( __FILE__ ).'Countries.xml' );
-				
 				$shipping_country_id = '';
-				foreach( $countries as $country ){
-					if( $country->attributes()->Name == $orderplaced->address_country ){
-						$shipping_country_id = $country->attributes()->Code;
-					} 
+				if(ini_get('allow_url_fopen')) {//To check if fopen is "ON"
+					$countries = simplexml_load_file( plugin_dir_path( __FILE__ ).'Countries.xml' );
+					foreach( $countries as $country ){
+						if( $country->attributes()->Name == $orderplaced->address_country ){
+							$shipping_country_id = $country->attributes()->Code;
+						} 
+					}
 				}
 				if($shipping_country_id) {
 				$ship_country=$dom->createElement('ShippingCountryCode',$shipping_country_id);

@@ -184,7 +184,18 @@ class GFCnpPlugin {
 							$hasproducts = true;							
 						}
 					}
-					
+					if(!extension_loaded('soap')) {
+						$errmsg = "SOAP Client is need to process C&P Transaction. Please contact administrator.\n";
+						$data['is_valid'] = false;
+						if($formData->creditcardCount != 0) {
+						$formData->ccField['validation_message'] = $errmsg;
+						$formData->ccField['failed_validation'] = true;
+						}
+						else {
+						$formData->ecField['validation_message'] = $errmsg;
+						$formData->ecField['failed_validation'] = true;
+						}
+					}
 					if($formData->creditcardCount > 1)
 					{
 						$errmsg = "Error in the form. Form should have only one Credit card field. Please contact administrator\n";
