@@ -294,7 +294,7 @@ class GFCnpPlugin {
 							} else if($formData->echeckCount > 0 && $formData->ecRouting != '') {
 								$processtype = 'eCheck';
 							}
-							/*
+							
 							// check for required fields
 							if($formData->creditcardCount != 0 && $processtype == 'CareditCard') {
 								$expires = DateTime::createFromFormat('my', $formData->ccExpMonth.$formData->ccExpYear);
@@ -303,7 +303,6 @@ class GFCnpPlugin {
 								$formData->ccField['validation_message'] = 'Credit Card Expired';
 								$formData->ccField['failed_validation'] = true;
 							}
-							*/
 							if(strlen($formData->ccCVN) > 4) {
 								$formData->ccField['validation_message'] = 'Security Code should contain 3 or 4 digits only';
 								$formData->ccField['failed_validation'] = true;
